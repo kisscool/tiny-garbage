@@ -62,6 +62,23 @@ class Entry
     Entry.all(:name.like => "%#{query}%", :order => [:ftp_server_id.desc])
   end
 
+  # version with pagination
+  def self.search_with_page(query, page)
+    # here we define how many results we want per page
+    per_page = 2
+
+    # basic checks
+    query ||= ""
+    page  ||= 1
+    # query with a limited number of results
+    results = Entry.all(:name.like => "%#{query}%", :order => [:ftp_server_id.desc], :limit => per_page, :offset => (page - 1) * per_page)
+    # how many pages we will have
+    page_count = (results.count.to_f / per_page).ceil
+
+    # finally we return both informations
+    return [ page_count, results ]
+  end
+
 end
 
 # this class is a subclass of Entry
