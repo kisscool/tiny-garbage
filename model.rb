@@ -46,9 +46,20 @@ class Entry
     ancestors_path + name
   end
 
+  # gives the remote path of the entry, eg. ftp://host/full_path
+  def remote_path
+    "ftp://" + ftp_server.host + full_path
+  end
+
   # no need to explain
   def to_s
     name
+  end
+
+  # search in the index
+  # return an array of entries
+  def self.search(query)
+    Entry.all(:name.like => "%#{query}%", :order => [:ftp_server_id.desc])
   end
 
 end
