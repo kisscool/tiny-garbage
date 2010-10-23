@@ -31,6 +31,10 @@ class App < Sinatra::Base
     haml :index
   end
 
+  get '/search' do
+    @results = Entry.search params[:query]
+    haml :index
+  end
 
   ############ Misc
   #
