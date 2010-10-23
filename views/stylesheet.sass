@@ -1,0 +1,95 @@
+/* vim: set softtabstop=2 shiftwidth=2 expandtab :
+ * (c) 2010 KissCool & Madtree */
+
+$darkblue: #0b1730
+$grayc: #ccc
+$lightgray: #f5f5f5
+$lightgrayshadow: #d5d5d5
+$lightblue: #f2f2ff
+$lightblueshadow: #d2d2df
+
+@mixin border-radius($radius)
+  border-radius: $radius
+  -moz-border-radius: $radius
+  -webkit-border-radius: $radius
+
+@mixin box-shadow($radius)
+  border-radius: $radius
+  -moz-box-shadow: $radius
+  -webkit-box-shadow: $radius
+                                                                                                                                                                
+                                                                              
+                                                                                                                                                                
+                                                                              
+body                                                                                                                                                            
+                                                                              
+  margin: 0px
+  padding: 0px
+  background-color: $darkblue
+
+
+/* layout */
+header
+  display: block
+  height: 80px
+
+#container
+  display: block
+  width: 70%
+  margin-left: auto
+  margin-right: auto
+
+nav
+  display: block
+  height: 20px
+
+#content-wrapper
+  width: 100%
+  display: block
+
+content
+  display: block
+  margin-right: 20px
+
+
+
+#right-nav
+  display: table-cell
+  margin-left: 20px
+  width: 196px
+
+#footer-wrapper
+  width: 100%
+  display: block
+
+footer
+  display: block
+  clear: both
+  width: 100%
+/* kikoolol */
+
+#container
+  background-color: white 
+  color: #000
+  padding-left: 2%
+  padding-right: 2%
+  padding-bottom: 2%
+  @include border-radius(0 0 20px 20px)
+  @include box-shadow(0 0 80px #555)
+
+#content-wrapper
+  margin: 0
+  padding: 0
+
+
+#footer-wrapper
+  background-color: #fff
+  border-top: 2px solid $grayc
+
+
+footer
+  margin: 0
+  padding: 20px
+  text-align: center
+  font-size: 10px
+  font-family: sans-serif
