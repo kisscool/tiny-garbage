@@ -1,0 +1,20 @@
+== Tiny-Garbage
+
+Just a little FTP crawler, with a little Sinatra based search interface in order to browse the FTP index.
+Nothing else, nothing more.
+
+== Dependencies
+
+gem required are :
+- dm-core
+- dm-migrations
+- dm-is-tree
+- dm-sqlite-adapter (or whatever else db, just one line of code to change)
+- sinatra
+- haml
+- net-ftp-list
+- Rack (optionnal)
+
+== Thanks
+
+Thanks to Loic Gomez first Garbage Collector, which was so usefull through the years, and thanks to Zouchaoqun's ezFtpSearch (http://github.com/zouchaoqun/ezftpsearch) whose model bootstrapped our work.
