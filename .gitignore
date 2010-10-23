@@ -1,0 +1,6 @@
+## VIM
+*.swp
+
+## Project
+log/*
+
