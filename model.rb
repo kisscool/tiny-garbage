@@ -51,6 +51,12 @@ class Entry
     name
   end
 
+  # search in the index
+  # return an array of entries
+  def self.search(query)
+    Entry.all(:name.like => "%#{query}%", :order => [:ftp_server_id.desc])
+  end
+
 end
 
 # this class is a subclass of Entry
