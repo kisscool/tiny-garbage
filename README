@@ -17,4 +17,4 @@ gem required are :
 
 == Thanks
 
-Thanks to Loic Gomez first Garbage Collector, which was so usefull through the years, and thanks to Zouchaoqun's ezFtpSearch (http://github.com/zouchaoqun/ezftpsearch) whose model bootstrapped our work.
+Thanks to Loic Gomez for the first Garbage Collector, which was so useful through the years, and thanks to Zouchaoqun's ezFtpSearch (http://github.com/zouchaoqun/ezftpsearch) whose model bootstrapped our work.
