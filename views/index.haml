@@ -1,3 +1,8 @@
 %form{:method => 'get', :action => '/search'}
   %input{:type => 'search', :name => 'query', :placeholder => 'Poney.avi',:value => params[:query]}
   %input{:type => "submit", :value => "Search", :class => "button"}
+
+- if not @results.nil?
+  - @results.each do |entry|
+    %a{:title => entry.name, :href => entry.remote_path}= entry.full_path
+
