@@ -1,0 +1,43 @@
+# Logfile created on Sat Oct 23 19:48:29 +0200 2010 by logger.rb/22285
+I, [2010-10-23T19:48:29.680149 #43815]  INFO -- : Trying ftp server erebor (id=1) on 10.2.0.1
+I, [2010-10-23T19:48:29.722726 #43815]  INFO -- : Server connected
+I, [2010-10-23T19:48:29.728451 #43815]  INFO -- : Old ftp entries in ftp_entry deleted before get entries
+I, [2010-10-23T19:48:36.954218 #43815]  INFO -- : Old ftp entries in swap_ftp_entry deleted after get entries
+I, [2010-10-23T19:48:36.954666 #43815]  INFO -- : Finish getting list of server erebor in 7.231516 seconds.
+I, [2010-10-23T19:48:36.955447 #43815]  INFO -- : Total entries: 369. 51 entries per second.
+I, [2010-10-23T19:48:36.957813 #43815]  INFO -- : Ftp connection closed.
+I, [2010-10-23T19:52:42.281363 #44276]  INFO -- : Trying ftp server erebor (id=1) on 10.2.0.1
+I, [2010-10-23T19:52:42.303623 #44276]  INFO -- : Server connected
+I, [2010-10-23T19:52:42.309592 #44276]  INFO -- : Old ftp entries in ftp_entry deleted before get entries
+I, [2010-10-23T19:52:45.232572 #44276]  INFO -- : Old ftp entries in swap_ftp_entry deleted after get entries
+I, [2010-10-23T19:52:45.233040 #44276]  INFO -- : Finish getting list of server erebor in 2.929015 seconds.
+I, [2010-10-23T19:52:45.233290 #44276]  INFO -- : Total entries: 369. 125 entries per second.
+I, [2010-10-23T19:52:45.238015 #44276]  INFO -- : Ftp connection closed.
+I, [2010-10-23T20:04:53.745879 #45208]  INFO -- : Trying ftp server erebor (id=1) on 10.2.0.1
+I, [2010-10-23T20:04:53.767399 #45208]  INFO -- : Server connected
+I, [2010-10-23T20:04:53.772416 #45208]  INFO -- : Old ftp entries in ftp_entry deleted before get entries
+I, [2010-10-23T20:04:56.729783 #45208]  INFO -- : Old ftp entries in swap_ftp_entry deleted after get entries
+I, [2010-10-23T20:04:56.730220 #45208]  INFO -- : Finish getting list of server erebor in 2.962402 seconds.
+I, [2010-10-23T20:04:56.730465 #45208]  INFO -- : Total entries: 369. 124 entries per second.
+I, [2010-10-23T20:04:56.732591 #45208]  INFO -- : Ftp connection closed.
+I, [2010-10-23T20:05:56.702279 #45458]  INFO -- : Trying ftp server erebor (id=1) on 10.2.0.1
+I, [2010-10-23T20:05:56.722736 #45458]  INFO -- : Server connected
+I, [2010-10-23T20:05:56.727614 #45458]  INFO -- : Old ftp entries in ftp_entry deleted before get entries
+I, [2010-10-23T20:05:59.705006 #45458]  INFO -- : Old ftp entries in swap_ftp_entry deleted after get entries
+I, [2010-10-23T20:05:59.705437 #45458]  INFO -- : Finish getting list of server erebor in 2.982291 seconds.
+I, [2010-10-23T20:05:59.705804 #45458]  INFO -- : Total entries: 369. 123 entries per second.
+I, [2010-10-23T20:05:59.707986 #45458]  INFO -- : Ftp connection closed.
+I, [2010-10-23T20:08:16.976012 #45632]  INFO -- : Trying ftp server erebor (id=1) on 10.2.0.1
+I, [2010-10-23T20:08:16.996220 #45632]  INFO -- : Server connected
+I, [2010-10-23T20:08:17.000760 #45632]  INFO -- : Old ftp entries in ftp_entry deleted before get entries
+I, [2010-10-23T20:08:20.077379 #45632]  INFO -- : Old ftp entries in swap_ftp_entry deleted after get entries
+I, [2010-10-23T20:08:20.077881 #45632]  INFO -- : Finish getting list of server erebor in 3.081214 seconds.
+I, [2010-10-23T20:08:20.078890 #45632]  INFO -- : Total entries: 369. 119 entries per second.
+I, [2010-10-23T20:08:20.084681 #45632]  INFO -- : Ftp connection closed.
+I, [2010-10-23T20:09:10.217446 #45644]  INFO -- : Trying ftp server erebor (id=1) on 10.2.0.1
+I, [2010-10-23T20:09:10.238341 #45644]  INFO -- : Server connected
+I, [2010-10-23T20:09:10.243004 #45644]  INFO -- : Old ftp entries in ftp_entry deleted before get entries
+I, [2010-10-23T20:09:15.714581 #45644]  INFO -- : Old ftp entries in swap_ftp_entry deleted after get entries
+I, [2010-10-23T20:09:15.715049 #45644]  INFO -- : Finish getting list of server erebor in 5.476307 seconds.
+I, [2010-10-23T20:09:15.715303 #45644]  INFO -- : Total entries: 369. 67 entries per second.
+I, [2010-10-23T20:09:15.717716 #45644]  INFO -- : Ftp connection closed.
