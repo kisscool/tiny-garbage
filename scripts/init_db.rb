@@ -3,7 +3,7 @@
 # (c) 2010 KissCool & Madtree
 
 # loading the db model
-require File.join(File.dirname(__FILE__), 'model.rb')
+require File.join(File.dirname(__FILE__), '../model.rb')
 
 require 'dm-migrations'
 

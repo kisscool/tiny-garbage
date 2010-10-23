@@ -5,13 +5,14 @@ Nothing else, nothing more.
 
 == Dependencies
 
-gem required are :
+Required gems are :
 - dm-core
 - dm-migrations
 - dm-is-tree
 - dm-sqlite-adapter (or whatever else db, just one line of code to change)
 - sinatra
 - haml
+- sass
 - net-ftp-list
 - Rack (optionnal)
 
