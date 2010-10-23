@@ -1,0 +1,16 @@
+%html
+  %head
+    %title Tiny Garbage
+    %link{:rel => "stylesheet", :href => "/stylesheet.css", :type => "text/css"}/
+  %body
+    #container
+      %header ceci est un header
+      %nav
+      #content-wrapper
+        %content
+          = yield
+        #colspace
+        #right-nav
+      #footer-wrapper
+        %footer Tiny Garbage -- &copy; KissCool and Madtree<br/> powered by sinatra 
+       
