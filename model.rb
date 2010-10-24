@@ -34,7 +34,7 @@ class Entry
   # gives the full path of the directory above the entry
   def ancestors_path
     if parent
-      p = ancestors.reverse.join('/')
+      p = ancestors.join('/')
       '/' + p + '/'
     else
       '/'
