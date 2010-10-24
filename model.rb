@@ -2,6 +2,7 @@
 # (c) 2009 Zouchaoqun
 # (c) 2010 KissCool
 require 'rubygems'
+require 'socket'
 # use Bundler if present
 begin
   require 'bundler/setup'
@@ -160,9 +161,11 @@ class FtpServer
       if is_alive
         # but that he is a FTP server
         # then we create it
+        # after a quick reverse DNS resolution
+        name = Socket.getaddrinfo(line, 0, Socket::AF_UNSPEC, Socket::SOCK_STREAM, nil, Socket::AI_CANONNAME)[0][2]
         self.create(
           :host       => host,
-          :name       => "plop",
+          :name       => name,
           :is_alive   => is_alive,
           :last_ping  => Time.now
         )
