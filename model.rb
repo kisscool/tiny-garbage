@@ -135,6 +135,8 @@ class FtpServer
   property :note,         Text
   property :in_swap,      Boolean, :default => true, :required => true
   property :updated_on,   DateTime
+  property :last_ping,    Datetime
+  property :is_alive,     Boolean, :default => false
 
   # each FtpServer is linked to entries from the Entry class
   # so we don't have to bother wether the entries are currently
@@ -147,6 +149,32 @@ class FtpServer
   def to_s
     "id:#{id} NAME:#{name} HOST:#{host} FTP_TYPE:#{ftp_type} LOGIN:#{login}
      PASSWORD:#{password} IGNORED:#{ignored_dirs} NOTE:#{note}"
+  end
+
+  # handle the ping scan backend
+  def self.ping_scan_result(host, is_alive)
+    # fist we check if the host is known in the database
+    server = self.first(:host => host)
+    if server.nil?
+      # if the server doesn't exist
+      if is_alive
+        # but that he is a FTP server
+        # then we create it
+        self.create(
+          :host       => host,
+          :name       => "plop",
+          :is_alive   => is_alive,
+          :last_ping  => Time.now
+        )
+      end
+    else
+      # if the server exists in the database
+      # then we update its status
+      server.update(
+        :is_alive   => is_alive,
+        :last_ping  => Time.now
+      )
+    end
   end
 
   # this is the method which launch the process to index an FTP server
@@ -309,6 +337,7 @@ puts "#{@entry_count} #{e}"
         :size => entry.filesize,
         :entry_datetime => file_datetime,
         :directory => entry.dir?,
+        :updated_on => Time.now,
         :ftp_server_id => id
       )
 
