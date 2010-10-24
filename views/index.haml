@@ -7,7 +7,10 @@
     %a{:title => entry.name, :href => entry.remote_path}= entry.full_path
     %br
 
-- if not @page_count.nil?
-  = @page_count
+- if not @page_count.nil? and @page_count > 1
+  - if params[:page].to_i > 1
+    %a{:title => 'previous', :href => "/search?query=#{params[:query]}&page=#{params[:page].to_i - 1}"} Previous
   - 1.upto(@page_count) do |p|
     %a{:title => 'page', :href => "/search?query=#{params[:query]}&page=#{p}"}= p
+  - if params[:page].to_i < @page_count
+    %a{:title => 'next', :href => "/search?query=#{params[:query]}&page=#{params[:page].to_i + 1}"} Next
