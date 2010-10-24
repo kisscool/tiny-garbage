@@ -31,8 +31,8 @@ You will certainly want to configure :
 * scripts/ping.cron.rb to specify which IP ranges you want to scan
 
 = The Web UI part
-For a first try you can just launch ./config.ru in order to test the UI with Webrick.
-If you want to deploy it in production, you will want to check Unicorn, Thin or Phusion Passenger documentations.
+For a first try you can just launch "rackup config.ru" in order to test the web UI with the pure ruby Webrick server.
+If you want to deploy it in production, you will want to check Unicorn, Thin or Phusion Passenger documentations for more solids options.
 
 == Thanks
 
