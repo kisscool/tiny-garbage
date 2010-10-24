@@ -136,7 +136,7 @@ class FtpServer
   property :note,         Text
   property :in_swap,      Boolean, :default => true, :required => true
   property :updated_on,   DateTime
-  property :last_ping,    Datetime
+  property :last_ping,    DateTime
   property :is_alive,     Boolean, :default => false
 
   # each FtpServer is linked to entries from the Entry class
@@ -249,6 +249,7 @@ class FtpServer
       retry
     ensure
       ftp.close if !ftp.closed?
+      updated_on = Time.now
       @logger.info("Ftp connection closed.")
       @logger.close
     end
@@ -340,7 +341,6 @@ puts "#{@entry_count} #{e}"
         :size => entry.filesize,
         :entry_datetime => file_datetime,
         :directory => entry.dir?,
-        :updated_on => Time.now,
         :ftp_server_id => id
       )
 

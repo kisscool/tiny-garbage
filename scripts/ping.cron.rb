@@ -60,4 +60,4 @@ IO.popen "fping -a -g #{NETWORK}" do |io|
   end
 end
 
-
+@logger.close
