@@ -4,6 +4,7 @@
 require 'rubygems'
 require 'dm-core'
 require 'dm-is-tree'
+require 'dm-aggregates'
 
 # a lot of this code has been forked from Zouchaoqun's ezFtpSearch project
 # kuddos to his work
@@ -70,10 +71,17 @@ class Entry
     # basic checks
     query ||= ""
     page  ||= 1
+    if page <= 1
+     page = 1
+    end
+
+    # we build the base query
+    filter = {:name.like => "%#{query}%", :order => [:ftp_server_id.desc]}
     # query with a limited number of results
-    results = Entry.all(:name.like => "%#{query}%", :order => [:ftp_server_id.desc], :limit => per_page, :offset => (page - 1) * per_page)
+    results = Entry.all(filter.merge({:limit => per_page, :offset => (page - 1) * per_page}))
+    
     # how many pages we will have
-    page_count = (results.count.to_f / per_page).ceil
+    page_count = (Entry.count(filter).to_f / per_page).ceil
 
     # finally we return both informations
     return [ page_count, results ]

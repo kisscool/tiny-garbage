@@ -5,4 +5,9 @@
 - if not @results.nil?
   - @results.each do |entry|
     %a{:title => entry.name, :href => entry.remote_path}= entry.full_path
+    %br
 
+- if not @page_count.nil?
+  = @page_count
+  - 1.upto(@page_count) do |p|
+    %a{:title => 'page', :href => "/search?query=#{params[:query]}&page=#{p}"}= p
