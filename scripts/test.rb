@@ -7,7 +7,7 @@ require File.join(File.dirname(__FILE__), '../model.rb')
 
 
 
-FtpServer.all.each do |ftp|
+FtpServer.all(:name => "erebor").each do |ftp|
   ftp.get_entry_list
   puts "etat in_swap : #{ftp.in_swap}"
 end

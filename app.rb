@@ -32,7 +32,7 @@ class App < Sinatra::Base
   end
 
   get '/search' do
-    @page_count, @results = Entry.search_with_page params[:query], params[:page].to_i
+    @page_count, @results = Entry.search_with_page(format_query(params[:query]), params[:page].to_i)
     haml :index
   end
 
