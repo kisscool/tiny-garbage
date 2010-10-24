@@ -2,6 +2,12 @@
 # (c) 2009 Zouchaoqun
 # (c) 2010 KissCool
 require 'rubygems'
+# use Bundler if present
+begin
+  require 'bundler/setup'
+rescue LoadError
+end
+# let's load the DM stuff
 require 'dm-core'
 require 'dm-is-tree'
 require 'dm-aggregates'
@@ -12,7 +18,23 @@ require 'dm-aggregates'
 # my main modifications have consisted to reduce code duplication and to
 # migrate it from ActiveRecord to DataMapper
 
+
+###############################################################################
+################### CONFIGURATION
+
+# by default we use a Sqlite backend
+# if you need better performances (eg. for a real deployment) then comment
+# the following line and read the following section
 DataMapper.setup(:default, "sqlite3://#{File.dirname(File.expand_path(__FILE__))}/db.sqlite3")
+
+# For an installation with MySQL :
+# 1. install the 'dm-mysql-adapter' gem
+# 2. uncomment and complete the following line
+#DataMapper.setup(:default, "mysql://user:password@hostname/dbname")
+
+
+###############################################################################
+################### ORM MODEL CODE (do not edit if you don't know)
 
 #
 # the Entry class is a generic class for fiels and directories 

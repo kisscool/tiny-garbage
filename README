@@ -20,6 +20,20 @@ Required gems are :
 If you have Bundler installed on your system, you can track down all those dependencies by launching the following command from inside the project directory :
 $ bundle install
 
+== Install
+
+= The crawler part
+
+Just do a clone of the project git repository, install the missing dependencies then configure your cron to launch the scripts/*.cron.rb scripts at whatever frequency you want.
+
+You will certainly want to configure :
+* model.rb to connect to your database
+* scripts/ping.cron.rb to specify which IP ranges you want to scan
+
+= The Web UI part
+For a first try you can just launch ./config.ru in order to test the UI with Webrick.
+If you want to deploy it in production, you will want to check Unicorn, Thin or Phusion Passenger documentations.
+
 == Thanks
 
 Thanks to Loic Gomez for the first Garbage Collector, which was so useful through the years, and thanks to Zouchaoqun's ezFtpSearch (http://github.com/zouchaoqun/ezftpsearch) whose model bootstrapped our work.
