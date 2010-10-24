@@ -9,6 +9,7 @@ Required gems are :
 - dm-core
 - dm-migrations
 - dm-is-tree
+- dm-aggregates
 - dm-sqlite-adapter (or whatever else db, just one line of code to change)
 - sinatra
 - haml
