@@ -26,7 +26,7 @@ require 'logger'
 # static configs
 @max_retries = 3
 BasicSocket.do_not_reverse_lookup = true
-@logger = Logger.new(File.dirname(__FILE__) + '/log/ping.log', 'monthly')
+@logger = Logger.new(File.join(File.dirname(__FILE__), '../log/ping.log'), 'monthly')
 @logger.formatter = Logger::Formatter.new
 @logger.datetime_format = "%Y-%m-%d %H:%M:%S"
 
@@ -34,17 +34,20 @@ BasicSocket.do_not_reverse_lookup = true
 IO.popen "fping -a -g #{NETWORK}" do |io|
   io.each do |line|     # for each alive host
     puts line
+    line.chomp!
     @logger.info("Trying alive host #{line} for FTP connexion}")
     # we check if its FTP port is open
     retries_count = 0
     begin
-      Net::FTP.open(line, "anonymous", "garbage") do |ftp|
-        # if the FTP port is responding, then we update
-        # the database
+      ftp = Net::FTP.open(line, "anonymous", "garbage")
+      # if the FTP port is responding, then we update
+      # the database
+      if ftp && !ftp.closed?
         @logger.info("Host #{line} did accept FTP connexion")
         FtpServer.ping_scan_result(line, true)
+        ftp.close
       end
-    rescue
+    rescue => detail
       # if it didn't accept connexion, we retry
       retries_count += 1
       if (retries_count >= @max_retries)
@@ -52,10 +55,10 @@ IO.popen "fping -a -g #{NETWORK}" do |io|
         # not considered as an FTP host
         @logger.info("Host #{line} didn't accept FTP connexion")
         FtpServer.ping_scan_result(line, false)
-        break
+      else
+        sleep(10)
+        retry
       end
-      sleep(10)
-      retry
     end
   end
 end

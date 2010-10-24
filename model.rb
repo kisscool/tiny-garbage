@@ -162,7 +162,11 @@ class FtpServer
         # but that he is a FTP server
         # then we create it
         # after a quick reverse DNS resolution
-        name = Socket.getaddrinfo(line, 0, Socket::AF_UNSPEC, Socket::SOCK_STREAM, nil, Socket::AI_CANONNAME)[0][2]
+        begin
+          name = Socket.getaddrinfo(line, 0, Socket::AF_UNSPEC, Socket::SOCK_STREAM, nil, Socket::AI_CANONNAME)[0][2]
+        rescue
+          name = "anonymous ftp"
+        end
         self.create(
           :host       => host,
           :name       => name,
