@@ -7,7 +7,7 @@ require 'haml'
 require 'sass'
 
 # helpers
-require File.join(File.dirname(__FILE__), 'helpers.rb')
+require File.join(File.dirname(__FILE__), '/lib/helpers.rb')
 
 
 # entry point
