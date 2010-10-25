@@ -5,15 +5,18 @@
 # requires
 require 'net/ftp'
 require 'logger'
+require 'ping'
 # loading the db model
 require File.join(File.dirname(__FILE__), '../model.rb')
+# loading our threadpool library
+require File.join(File.dirname(__FILE__), '../lib/threadpool.rb')
 
 ###########################################################
 ################### CONFIGURATION
 
 @options = {
-  :action   => "",
-  :networks => "10.2.0.0/24"
+  :action   => '',
+  :networks => '10.2.0.*'
 }
 
 ###########################################################
@@ -36,7 +39,104 @@ end
 # the recommenced frequency for this job is one every 
 # 10 minutes for a little network, or once an hour for a
 # big network
+
+# expand networks in an array of hosts
+# eg. "10.2.0.* 10.3.0.1" --> ["10.2.0.1", "10.2.0.2", ..., "10.3.0.1"]
+def expand_network(networks)
+  # we split the string
+  expanded_ip_list = networks.split(" ").collect do |network|
+    if network.include? '*'
+      # if an adress contains a '*' character we replace it
+      (1..254).collect do |num|
+        network.gsub(/\*/, num.to_s)
+      end
+    else
+      # else we don't alter it
+      network
+    end
+  end
+  # ultimately we want a one dimensional array
+  expanded_ip_list.flatten
+end
+
+# check if an host is alive on the TCP port 21
+def ping_tcp(ip)
+  Ping.pingecho(ip, 3, 21)
+end
+
+# check if we can make an FTP connexion with an host
+def ping_ftp(ip)
+  puts ip
+  #line.chomp!
+  @logger.info("Trying alive host #{ip} for FTP connexion}")
+  # we check if its FTP port is open
+  retries_count = 0
+  begin
+    ftp = Net::FTP.open(ip, "anonymous", "garbage")
+    # if the FTP port is responding, then we update
+    # the database
+    if ftp && !ftp.closed?
+      @logger.info("Host #{ip} did accept FTP connexion")
+      #FtpServer.ping_scan_result(line, true)
+      ftp.close
+      return true
+    end
+  rescue => detail
+    # if it didn't accept connexion, we retry
+    retries_count += 1
+    if (retries_count >= @max_retries)
+      # if we surpass @max_retries, then the host is
+      # not considered as an FTP host
+      @logger.info("Host #{ip} didn't accept FTP connexion")
+      #FtpServer.ping_scan_result(line, false)
+      return false
+    else
+      sleep(10)
+      retry
+    end
+  end
+end
+
 def ping
+  # we get a list of hosts to check
+  expanded_ip_list = expand_network(@options[:networks])
+
+  # static configs
+  @max_retries = 3
+  BasicSocket.do_not_reverse_lookup = true
+  @logger = Logger.new(File.join(File.dirname(__FILE__), '../log/ping.log'), 'monthly')
+  @logger.formatter = Logger::Formatter.new
+  @logger.datetime_format = "%Y-%m-%d %H:%M:%S"
+
+  # we prepare the threadpool
+  pool = ThreadPool.new(30)
+
+  # for each host we launch one TCP ping
+  # then we check the FTP connexion if the host
+  # is alive
+  expanded_ip_list.each do |ip|
+    # we use thread in order to speed up the process
+    pool.dispatch(ip) do |ip|
+      if ping_tcp(ip)   # first we check the host is alive
+        if ping_ftp(ip) # then we check the FTP connexion
+          FtpServer.ping_scan_result(ip, true)
+        else
+          FtpServer.ping_scan_result(ip, false)
+        end
+      end
+    end
+  end
+
+  # we close the threadpool
+  pool.shutdown
+
+  # and the logging facility
+  @logger.close
+end
+
+
+
+def ping_bis
 
   # static configs
   @max_retries = 3
