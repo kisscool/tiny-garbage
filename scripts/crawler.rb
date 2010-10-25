@@ -25,7 +25,7 @@ require File.join(File.dirname(__FILE__), '../model.rb')
 #
 # a possible future optimization would be multi-threading
 def index
-  FtpServer.all.each do |ftp|
+  FtpServer.all(:is_alive => true).each do |ftp|
     ftp.get_entry_list
   end
 end

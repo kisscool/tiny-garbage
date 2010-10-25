@@ -307,7 +307,7 @@ private
       next if /^total/.match(e)
 
 # usefull for debugging purpose
-puts "#{@entry_count} #{e}"
+#puts "#{@entry_count} #{e}"
 
       if force_utf8
         begin
