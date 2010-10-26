@@ -79,6 +79,10 @@ class Entry
   def to_s
     name
   end
+  
+  def get_size
+    size
+  end
 
   # search in the index
   # return an array of entries
