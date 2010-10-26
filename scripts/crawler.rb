@@ -28,9 +28,19 @@ require File.join(File.dirname(__FILE__), '../lib/threadpool.rb')
 #
 # a possible future optimization would be multi-threading
 def index
+  # we prepare the threadpool
+  pool = ThreadPool.new(5)
+
   FtpServer.all(:is_alive => true).each do |ftp|
-    ftp.get_entry_list
+    # we use thread in order to speed up the process
+    pool.dispatch(ftp) do |ftp|
+      # scan the following ftp
+      ftp.get_entry_list
+    end
   end
+
+  # we close the threadpool
+  pool.shutdown
 end
 
 
