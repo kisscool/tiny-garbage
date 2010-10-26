@@ -28,9 +28,19 @@ require File.join(File.dirname(__FILE__), '../lib/threadpool.rb')
 #
 # a possible future optimization would be multi-threading
 def index
+  # we prepare the threadpool
+  pool = ThreadPool.new(5)
+
   FtpServer.all(:is_alive => true).each do |ftp|
-    ftp.get_entry_list
+    # we use thread in order to speed up the process
+    pool.dispatch(ftp) do |ftp|
+      # scan the following ftp
+      ftp.get_entry_list
+    end
   end
+
+  # we close the threadpool
+  pool.shutdown
 end
 
 
@@ -136,52 +146,6 @@ end
 
 
 
-def ping_bis
-
-  # static configs
-  @max_retries = 3
-  BasicSocket.do_not_reverse_lookup = true
-  @logger = Logger.new(File.join(File.dirname(__FILE__), '../log/ping.log'), 'monthly')
-  @logger.formatter = Logger::Formatter.new
-  @logger.datetime_format = "%Y-%m-%d %H:%M:%S"
-
-  # first we perform a massive ping on the whole network
-  IO.popen "fping -a -g #{@options[:networks]}" do |io|
-    io.each do |line|     # for each alive host
-      puts line
-      line.chomp!
-      @logger.info("Trying alive host #{line} for FTP connexion}")
-      # we check if its FTP port is open
-      retries_count = 0
-      begin
-        ftp = Net::FTP.open(line, "anonymous", "garbage")
-        # if the FTP port is responding, then we update
-        # the database
-        if ftp && !ftp.closed?
-          @logger.info("Host #{line} did accept FTP connexion")
-          FtpServer.ping_scan_result(line, true)
-          ftp.close
-        end
-      rescue => detail
-        # if it didn't accept connexion, we retry
-        retries_count += 1
-        if (retries_count >= @max_retries)
-          # if we surpass @max_retries, then the host is
-          # not considered as an FTP host
-          @logger.info("Host #{line} didn't accept FTP connexion")
-          FtpServer.ping_scan_result(line, false)
-        else
-          sleep(10)
-          retry
-        end
-      end
-    end
-  end
-
-  @logger.close
-end
-
-
 
 ###########################################################
 ################### PARSING
@@ -196,7 +160,7 @@ Usage: #{$0.split("/").last} [-h] { ping [networks] | index }
    * ping  : check if hosts in a network are alive and open to FTP
    * index : crawl known FTP servers and index their content
   options :
-   * networks : networks specified as in fping documentation
+   * networks : list of networks, eg. "10.2.0.* 10.3.0.1"
 EOF
 
 cmd = ARGV.shift
