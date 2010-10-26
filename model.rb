@@ -97,7 +97,7 @@ class Entry
 
 
     # we build the base query
-    filter = {:name.like => "%#{query}%", :order => [:ftp_server_id.desc]}
+    filter = {:name.like => "%#{query}%", :order => [:ftp_server_id.asc]}
     # query with a limited number of results
     results = Entry.all(filter.merge({:limit => per_page, :offset => (page - 1) * per_page}))
     
