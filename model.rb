@@ -21,17 +21,10 @@ require 'dm-aggregates'
 
 
 ###############################################################################
-################### CONFIGURATION
+################### LOAD OF CONFIGURATION
 
-# by default we use a Sqlite backend
-# if you need better performances (eg. for a real deployment) then comment
-# the following line and read the following section
-DataMapper.setup(:default, "sqlite3://#{File.dirname(File.expand_path(__FILE__))}/db.sqlite3")
-
-# For an installation with MySQL :
-# 1. install the 'dm-mysql-adapter' gem
-# 2. uncomment and complete the following line
-#DataMapper.setup(:default, "mysql://garbage:plop@127.0.0.1/garbage?encoding=UTF-8")
+# here we load config options
+require File.join(File.dirname(__FILE__), './config.rb')
 
 
 ###############################################################################
