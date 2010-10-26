@@ -1,11 +1,25 @@
 %form{:method => 'get', :action => '/search'}
-  %input{:type => 'search', :name => 'query', :placeholder => 'Poney.avi',:value => params[:query]}
-  %input{:type => "submit", :value => "Search", :class => "button"}
+  #searchBarDiv
+    %table{:id => 'searchBarWrapper'}
+      %tr
+        %td
+          %input{:type => 'search', :name => 'query', :placeholder => 'Poney.avi',:value => params[:query], :id => "searchBar" }
+        %td
+          %input{:type => "submit", :value => "Search", :class => "button", :id => "searchButton", :class => "searchButton", :onmousedown => "this.className='searchButtonClick'"}
 
-- if not @results.nil?
-  - @results.each do |entry|
-    %a{:title => entry.name, :href => entry.remote_path}= entry.full_path
-    %br
+
+%table{:id => "results"}
+  %tr
+    %th Nom du fichier
+    %th Taille
+  - if not @results.nil?
+    - @results.each do |entry|
+      %tr
+        %td
+          %a{:title => entry.name, :href => entry.remote_path}= entry.full_path
+        %td
+          = entry.get_size
+
 
 - if not @page_count.nil? and @page_count > 1
   - if params[:page].to_i > 1
