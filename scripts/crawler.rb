@@ -150,7 +150,7 @@ Usage: #{$0.split("/").last} [-h] { ping [networks] | index }
    * ping  : check if hosts in a network are alive and open to FTP
    * index : crawl known FTP servers and index their content
   options :
-   * networks : networks specified as in fping documentation
+   * networks : list of networks, eg. "10.2.0.* 10.3.0.1"
 EOF
 
 cmd = ARGV.shift
