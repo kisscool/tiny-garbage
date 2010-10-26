@@ -31,7 +31,7 @@ DataMapper.setup(:default, "sqlite3://#{File.dirname(File.expand_path(__FILE__))
 # For an installation with MySQL :
 # 1. install the 'dm-mysql-adapter' gem
 # 2. uncomment and complete the following line
-#DataMapper.setup(:default, "mysql://user:password@hostname/dbname")
+#DataMapper.setup(:default, "mysql://garbage:plop@127.0.0.1/garbage?encoding=UTF-8")
 
 
 ###############################################################################
@@ -44,8 +44,8 @@ class Entry
   property :id,             Serial
   property :parent_id,      Integer
   property :entries_count,  Integer, :default => 0, :required => true
-  property :name,           String, :required => true
-  property :size,           Integer
+  property :name,           String, :required => true, :length => 255, :index => true
+  property :size,           Float
   property :entry_datetime, DateTime
   property :directory,      Boolean, :default => false, :required => true
   property :type,           Discriminator # used to discriminate between FtpEntry and SwapFtpEntry
@@ -89,14 +89,15 @@ class Entry
   # version with pagination
   def self.search_with_page(query, page)
     # here we define how many results we want per page
-    per_page = 2
+    per_page = 5
 
-    # basic checks
+    # basic checks and default options
     query ||= ""
     page  ||= 1
     if page <= 1
      page = 1
     end
+
 
     # we build the base query
     filter = {:name.like => "%#{query}%", :order => [:ftp_server_id.desc]}
@@ -129,7 +130,7 @@ class FtpServer
   property :port,         Integer, :default => 21, :required => true
   property :ftp_type,     String, :default => 'Unix', :required => true
   property :ftp_encoding, String, :default => 'ISO-8859-1'
-  property :force_utf8,   Boolean, :default => false, :required => true
+  property :force_utf8,   Boolean, :default => true, :required => true
   property :login,        String, :default => 'anonymous', :required => true
   property :password,     String, :default => 'garbage', :required => true
   property :ignored_dirs, String, :default => '. .. .svn'
@@ -188,6 +189,7 @@ class FtpServer
   def get_entry_list(max_retries = 5)
     require 'net/ftp'
     require 'net/ftp/list'
+    require 'iconv'
     require 'logger'
     @max_retries = max_retries.to_i
     BasicSocket.do_not_reverse_lookup = true
@@ -339,7 +341,7 @@ private
       # the sql query from the legacy code has been replaced by a DM
       # insertion, apparently without sensible loss of performance
       # (only preliminary test) 
-      new_entry = tree_to_insert.create(
+      new_entry = tree_to_insert.create!(
         :parent_id => parent_id,
         :name => entry_basename,
         :size => entry.filesize,
