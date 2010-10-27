@@ -43,7 +43,7 @@ module MyHelpers
     exponent = max_exp if exponent > max_exp # we need this to avoid overflow for the highest unit
     number  /= 1024 ** exponent
 
-    "%n %u".gsub(/%n/, number.to_i.to_s).gsub(/%u/, STORAGE_UNITS[exponent])
+    "%n %u".gsub(/%n/, ((number * 100).round.to_f / 100).to_s).gsub(/%u/, STORAGE_UNITS[exponent])
   end
 
 end

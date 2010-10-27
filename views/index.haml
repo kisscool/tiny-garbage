@@ -29,7 +29,7 @@
           %td
             %a{:title => entry.name, :href => entry.remote_path}= entry.full_path
           %td
-            = entry.get_size
+            = number_to_human_size(entry.get_size)
 
 
 - if not @page_count.nil? and @page_count > 1
