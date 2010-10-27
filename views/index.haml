@@ -1,4 +1,4 @@
-%form{:method => 'get', :action => '/search'}
+%form{:method => 'get', :action => '/search', :id => "searchForm"}
   #searchDivWrapper
     #searchDiv
       #beautyDiv 
@@ -28,14 +28,14 @@
         %tr
           %td
             %a{:title => entry.name, :href => entry.remote_path}= entry.full_path
-          %td
+          %td{:class => "resultsSize"}
             = number_to_human_size(entry.get_size)
 
 
-- if not @page_count.nil? and @page_count > 1
-  - if params[:page].to_i > 1
-    %a{:title => 'previous', :href => "/search?query=#{params[:query]}&order=#{params[:order]}&page=#{params[:page].to_i - 1}"} Previous
-  - 1.upto(@page_count) do |p|
-    %a{:title => 'page', :href => "/search?query=#{params[:query]}&order=#{params[:order]}&page=#{p}"}= p
-  - if params[:page].to_i < @page_count
-    %a{:title => 'next', :href => "/search?query=#{params[:query]}&order=#{params[:order]}&page=#{params[:page].to_i + 1}"} Next
+  - if not @page_count.nil? and @page_count > 1
+    - if params[:page].to_i > 1
+      %a{:title => 'previous', :href => "/search?query=#{params[:query]}&order=#{params[:order]}&page=#{params[:page].to_i - 1}"} Previous
+    - 1.upto(@page_count) do |p|
+      %a{:title => 'page', :href => "/search?query=#{params[:query]}&order=#{params[:order]}&page=#{p}"}= p
+    - if params[:page].to_i < @page_count
+      %a{:title => 'next', :href => "/search?query=#{params[:query]}&order=#{params[:order]}&page=#{params[:page].to_i + 1}"} Next

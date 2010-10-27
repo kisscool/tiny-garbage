@@ -85,7 +85,7 @@ class Entry
   # version with pagination
   def self.search_with_page(query="", page=1, order="ftp_server_id.asc")
     # here we define how many results we want per page
-    per_page = 5
+    per_page = 15
 
     # basic checks and default options
     query ||= ""
