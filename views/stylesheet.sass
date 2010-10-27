@@ -32,61 +32,80 @@ body
 header
   display: block
   height: 80px
+  background-color: #000
+  color: #ccc
 
 #container
   display: block
-  width: 70%
+  width: 80%
   margin-left: auto
   margin-right: auto
+  background-color: white 
+  color: #000
+  padding-bottom: 20px
+  @include border-radius(0 0 20px 20px)
+  @include box-shadow(0 0 80px #555)
 
 nav
   display: block
   height: 20px
+  background-color: $lightblue
+
 
 #content-wrapper
   width: 100%
   display: block
 
+
 content
   display: block
-  margin-right: 20px
-
-
-
-#right-nav
-  display: table-cell
-  margin-left: 20px
-  width: 196px
+  width: 100%
 
 #footer-wrapper
+  background-color: #fff
+  border-top: 2px solid $grayc
   width: 100%
   display: block
 
 footer
+  margin: 0
+  padding: 20px
+  text-align: center
+  font-size: 10px
+  font-family: sans-serif
   display: block
   clear: both
   width: 100%
-/* kikoolol */
 
-#container
-  background-color: white 
-  color: #000
-  padding-left: 2%
-  padding-right: 2%
-  padding-bottom: 2%
-  @include border-radius(0 0 20px 20px)
-  @include box-shadow(0 0 80px #555)
+.spacer
+  clear: both
+
+/* search form */
+
+
+#searchDivWrapper
+  background-color: darken($lightblue, 2)
+  padding: 0 0 10px 0
+  width: 100%
+  margin: 0
+  display: block
+
+#searchDiv
+  background-color: $lightblue
+  padding: 0
+  margin: 0
+  width: 100%
+  display: block
 
 #searchBarDiv
   border-bottom: 1px solid #d9d9d9
-  margin-left: auto
-  margin-right: auto
-  width: 50%
+  float: left
+  display: block
+  width: 70%
   margin-top: 0px
   margin-bottom: 0px
   padding: 0px
-  font-size: 15px
-  height: 2em
+  height: 30px
 
   
 #searchBarWrapper
@@ -142,7 +161,61 @@ footer
     padding: 0px
     border: 0px
     background: #ccc
+
+#beautyDiv
+  float: left
+  width: 83%
+  height: 30px
+  margin: 0% 0% 0% 2%
+  background-color: darken($lightblue,2)
+#beautyDiv2
+  float: right
+  width: 30%
+  height: 30px
+  padding: 0
+  margin: 0
+  background-color: $lightblue
+  @include border-radius(0 0 15px 0)
+
+
+#collapseDiv
+  float: left
+  width: 15%
+  height: 30px
+  background-color: darken($lightblue, 2)
+  @include border-radius(15px 0 0 0)
+  #collapseImg
+    float: right
+    width: 11px
+    height: 11px
+    margin-top: 10px
+    margin-left: 10px
+    margin-right: 10px
+    margin-bottom: 9px
+  .collapseImgVisible
+    background: url(/img/collapse-show.png) no-repeat
+  .collapseImgHidden
+    background: url(/img/collapse-hide.png) no-repeat
+  #collapseText
+    float: right
+    height: 100%
+    vertical-align: middle
+    text-align: right
+    line-height: 30px
+  a, a:visited
+    color: darken($lightblue, 20)
+    font-family: arial, sans-serif
+    font-size: 12px
     
+#advancedSearch
+  height: 30px
+  display: none
+
+/* results */
+
+#resultsDiv
+  width: 96%
+  padding: 0% 2% 0% 2%
 
 #results
   width: 100%
@@ -152,19 +225,4 @@ footer
     border: 1px solid #000
   
   
-#content-wrapper
-  margin: 0
-  padding: 0
 
-
-#footer-wrapper
-  background-color: #fff
-  border-top: 2px solid $grayc
-
-
-footer
-  margin: 0
-  padding: 20px
-  text-align: center
-  font-size: 10px
-  font-family: sans-serif
