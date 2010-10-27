@@ -1,30 +1,41 @@
 %form{:method => 'get', :action => '/search'}
-  #searchBarDiv
-    %table{:id => 'searchBarWrapper'}
-      %tr
-        %td
-          %input{:type => 'search', :name => 'query', :placeholder => 'Poney.avi',:value => params[:query], :id => "searchBar" }
-        %td
-          %input{:type => "submit", :value => "Search", :class => "button", :id => "searchButton", :class => "searchButton", :onmousedown => "this.className='searchButtonClick'"}
+  #searchDivWrapper
+    #searchDiv
+      #beautyDiv 
+        #searchBarDiv
+          %table{:id => 'searchBarWrapper'}
+            %tr
+              %td
+                %input{:type => 'search', :name => 'query', :placeholder => 'Poney.avi',:value => params[:query], :id => "searchBar" }
+              %td
+                %input{:type => "submit", :value => "Search", :class => "button", :id => "searchButton", :class => "searchButton", :onmousedown => "this.className='searchButtonClick'", :onmouseup => "this.className='searchButton'"}
+        #beautyDiv2
+        %div{:class => 'spacer'}
+      #collapseDiv
+        %div{:id => "collapseImg", :class => "collapseImgVisible"}
+        #collapseText
+          %a{:title => 'show/hide advanced', :href => "#", :id => "collapseButton"} Show advanced
+      %div{:class => 'spacer'}
+    #advancedSearch
+
+#resultsDiv
+  %table{:id => "results"}
+    %tr
+      %th Nom du fichier
+      %th Taille
+    - if not @results.nil?
+      - @results.each do |entry|
+        %tr
+          %td
+            %a{:title => entry.name, :href => entry.remote_path}= entry.full_path
+          %td
+            = entry.get_size
 
 
-%table{:id => "results"}
-  %tr
-    %th Nom du fichier
-    %th Taille
-  - if not @results.nil?
-    - @results.each do |entry|
-      %tr
-        %td
-          %a{:title => entry.name, :href => entry.remote_path}= entry.full_path
-        %td
-          = entry.get_size
-
-
-- if not @page_count.nil? and @page_count > 1
-  - if params[:page].to_i > 1
-    %a{:title => 'previous', :href => "/search?query=#{params[:query]}&page=#{params[:page].to_i - 1}"} Previous
-  - 1.upto(@page_count) do |p|
-    %a{:title => 'page', :href => "/search?query=#{params[:query]}&page=#{p}"}= p
-  - if params[:page].to_i < @page_count
-    %a{:title => 'next', :href => "/search?query=#{params[:query]}&page=#{params[:page].to_i + 1}"} Next
+  - if not @page_count.nil? and @page_count > 1
+    - if params[:page].to_i > 1
+      %a{:title => 'previous', :href => "/search?query=#{params[:query]}&page=#{params[:page].to_i - 1}"} Previous
+    - 1.upto(@page_count) do |p|
+      %a{:title => 'page', :href => "/search?query=#{params[:query]}&page=#{p}"}= p
+    - if params[:page].to_i < @page_count
+      %a{:title => 'next', :href => "/search?query=#{params[:query]}&page=#{params[:page].to_i + 1}"} Next
