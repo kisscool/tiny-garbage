@@ -8,6 +8,13 @@
     #container
       %header ceci est un header
       %nav
+        %ul
+          %li
+            %a{:title => 'Search', :href => "/search"} Search
+          %li
+            %a{:title => 'FTP Listing', :href => "/list"} FTP Listing
+          %li
+            %a{:title => 'Stats', :href => "/stats"} Stats
       #content-wrapper
         %content
           = yield
