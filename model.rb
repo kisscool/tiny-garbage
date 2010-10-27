@@ -77,14 +77,13 @@ class Entry
     size
   end
 
-  # search in the index
   # return an array of entries
   def self.search(query)
     Entry.all(:name.like => "%#{query}%", :order => [:ftp_server_id.desc])
   end
 
   # version with pagination
-  def self.search_with_page(query, page)
+  def self.search_with_page(query="", page=1, order="ftp_server_id.asc")
     # here we define how many results we want per page
     per_page = 5
 
@@ -94,10 +93,14 @@ class Entry
     if page <= 1
      page = 1
     end
+    order ||= "ftp_server_id.asc"
 
+    # we build the order object
+    t = order.split('.')
+    build_order = DataMapper::Query::Operator.new(t[0], t[1] || 'asc')
 
     # we build the base query
-    filter = {:name.like => "%#{query}%", :order => [:ftp_server_id.asc]}
+    filter = {:name.like => "%#{query}%", :order => build_order}
     # query with a limited number of results
     results = Entry.all(filter.merge({:limit => per_page, :offset => (page - 1) * per_page}))
     

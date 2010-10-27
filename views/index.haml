@@ -23,8 +23,8 @@
 
 - if not @page_count.nil? and @page_count > 1
   - if params[:page].to_i > 1
-    %a{:title => 'previous', :href => "/search?query=#{params[:query]}&page=#{params[:page].to_i - 1}"} Previous
+    %a{:title => 'previous', :href => "/search?query=#{params[:query]}&order=#{params[:order]}&page=#{params[:page].to_i - 1}"} Previous
   - 1.upto(@page_count) do |p|
-    %a{:title => 'page', :href => "/search?query=#{params[:query]}&page=#{p}"}= p
+    %a{:title => 'page', :href => "/search?query=#{params[:query]}&order=#{params[:order]}&page=#{p}"}= p
   - if params[:page].to_i < @page_count
-    %a{:title => 'next', :href => "/search?query=#{params[:query]}&page=#{params[:page].to_i + 1}"} Next
+    %a{:title => 'next', :href => "/search?query=#{params[:query]}&order=#{params[:order]}&page=#{params[:page].to_i + 1}"} Next
