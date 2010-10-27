@@ -6,15 +6,16 @@
     %script{:type => "text/javascript", :src => "/js/main.js"}
   %body
     #container
-      %header ceci est un header
       %nav
         %ul
-          %li
+          %div{:class => 'topnavlink' } 
             %a{:title => 'Search', :href => "/search"} Search
-          %li
+          %div{:class => 'topnavlink' } 
             %a{:title => 'FTP Listing', :href => "/list"} FTP Listing
-          %li
+          %div{:class => 'topnavlink' } 
             %a{:title => 'Stats', :href => "/stats"} Stats
+      %header ceci est un header
+
       #content-wrapper
         %content
           = yield
