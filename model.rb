@@ -233,6 +233,7 @@ class FtpServer
       end
       @entry_count = 0
       get_list_of(ftp)
+      tree_to_insert.all(:ftp_server_id => id).save
       self.in_swap = !in_swap
       save
       # After table swap, delete old ftp entries to save db space
@@ -341,7 +342,8 @@ private
       # the sql query from the legacy code has been replaced by a DM
       # insertion, apparently without sensible loss of performance
       # (only preliminary test) 
-      new_entry = tree_to_insert.create!(
+      #new_entry = tree_to_insert.create!(
+      new_entry = tree_to_insert.new(
         :parent_id => parent_id,
         :name => entry_basename,
         :size => entry.filesize,
@@ -349,7 +351,7 @@ private
         :directory => entry.dir?,
         :ftp_server_id => id
       )
-
+      
       #entry_id = DataMapper.repository(:default).adapter.execute(sql).insert_id
       entry_id = new_entry.id
       if entry.dir?
