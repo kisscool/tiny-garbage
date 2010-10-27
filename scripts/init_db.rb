@@ -10,17 +10,4 @@ require 'dm-migrations'
 # let there be light
 DataMapper.auto_migrate!
 
-# server de test
-@server = FtpServer.new(
-  :name => "erebor",
-  :host => "10.2.0.1"
-)
-
-@server.save
-
-#query = "id = '#{ENV['server']}'"
-query = "id = 1"
-FtpServer.all.each do |ftp|
-  ftp.get_entry_list
-end
 

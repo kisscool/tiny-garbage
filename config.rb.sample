@@ -1,0 +1,18 @@
+# vim: set softtabstop=2 shiftwidth=2 expandtab :
+
+###############################################################################
+################### CONFIGURATION
+
+# in order to configure Tiny-Garbage, just copy config.rb.sample as 
+# config.rb and voila !
+
+# by default we use a Sqlite backend
+# if you need better performances (eg. for a real deployment) then comment
+# the following line and read the following section
+DataMapper.setup(:default, "sqlite3://#{File.dirname(File.expand_path(__FILE__))}/db.sqlite3")
+
+# For an installation with MySQL :
+# 1. install the 'dm-mysql-adapter' gem
+# 2. uncomment and complete the following line
+#DataMapper.setup(:default, "mysql://user:password@host/dbname?encoding=UTF-8")
+
