@@ -13,13 +13,6 @@ module MyHelpers
 #    RDiscount::new(string).to_html
 #  end
 
-  # prepare a string to be used as a search query
-  # eg. '"un espace" .flac' --> 'un espace%.flac'
-  def format_query(query)
-    tab = Shellwords.shellwords query
-    tab.join("%")
-  end
-
   def human_date(datetime)
     datetime.strftime('%d/%m/%Y').gsub(/ 0(\d{1})/, ' \1')
   end
@@ -30,6 +23,27 @@ module MyHelpers
 
   def partial(page, locals={})
     haml page, {:layout => false}, locals
+  end
+
+  # prepare a string to be used as a search query
+  # eg. '"un espace" .flac' --> 'un espace%.flac'
+  def format_query(query)
+    tab = Shellwords.shellwords query
+    tab.join("%")
+  end
+
+  # convert byte size in B, KB, MB.. human readable size
+  # inspired from Actionpack method
+  STORAGE_UNITS = ['B', 'KB', 'MB', 'GB', 'TB']
+  def number_to_human_size(number)
+    return nil if number.nil?
+    max_exp  = STORAGE_UNITS.size - 1
+    number   = Float(number)
+    exponent = (Math.log(number) / Math.log(1024)).to_i # Convert to base 1024
+    exponent = max_exp if exponent > max_exp # we need this to avoid overflow for the highest unit
+    number  /= 1024 ** exponent
+
+    "%n %u".gsub(/%n/, number.to_i.to_s).gsub(/%u/, STORAGE_UNITS[exponent])
   end
 
 end
