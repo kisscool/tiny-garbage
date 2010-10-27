@@ -232,8 +232,8 @@ class FtpServer
         @logger.info("Old ftp entries in swap_ftp_entry deleted before get entries")
       end
       @entry_count = 0
-      get_list_of(ftp)
-      tree_to_insert.all(:ftp_server_id => id).save
+      get_list_of(ftp)                              # building the index
+      tree_to_insert.all(:ftp_server_id => id).save # and saving it
       self.in_swap = !in_swap
       save
       # After table swap, delete old ftp entries to save db space
