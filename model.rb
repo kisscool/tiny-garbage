@@ -41,7 +41,8 @@ class Entry
   property :size,           Float
   property :entry_datetime, DateTime
   property :directory,      Boolean, :default => false, :required => true
-  property :type,           Discriminator # used to discriminate between FtpEntry and SwapFtpEntry
+  property :index_version,   Integer, :default => 0, :required => true # will help us avoid duplication during indexing
+  #property :type,           Discriminator # used to discriminate between FtpEntry and SwapFtpEntry
 
   belongs_to :ftp_server
   is :tree, :order => :name
@@ -116,29 +117,30 @@ end
 # this class is a subclass of Entry
 # the switch between FtpEntry and SwapFtpEntry could be handled in another way
 # but we keep it that way so we don't have to break entirely legacy code
-class FtpEntry < Entry ; end
+#class FtpEntry < Entry ; end
 
 # this class is a subclass of Entry
-class SwapFtpEntry < Entry ; end
+#class SwapFtpEntry < Entry ; end
 
 # each server is documented here
 class FtpServer
   include DataMapper::Resource
-  property :id,           Serial
-  property :name,         String, :required => true
-  property :host,         String, :required => true 
-  property :port,         Integer, :default => 21, :required => true
-  property :ftp_type,     String, :default => 'Unix', :required => true
-  property :ftp_encoding, String, :default => 'ISO-8859-1'
-  property :force_utf8,   Boolean, :default => true, :required => true
-  property :login,        String, :default => 'anonymous', :required => true
-  property :password,     String, :default => 'garbage', :required => true
-  property :ignored_dirs, String, :default => '. .. .svn'
-  property :note,         Text
-  property :in_swap,      Boolean, :default => true, :required => true
-  property :updated_on,   DateTime
-  property :last_ping,    DateTime
-  property :is_alive,     Boolean, :default => false
+  property :id,             Serial
+  property :name,           String, :required => true
+  property :host,           String, :required => true 
+  property :port,           Integer, :default => 21, :required => true
+  property :ftp_type,       String, :default => 'Unix', :required => true
+  property :ftp_encoding,   String, :default => 'ISO-8859-1'
+  property :force_utf8,     Boolean, :default => true, :required => true
+  property :login,          String, :default => 'anonymous', :required => true
+  property :password,       String, :default => 'garbage', :required => true
+  property :ignored_dirs,   String, :default => '. .. .svn'
+  property :note,           Text
+  #property :in_swap,        Boolean, :default => true, :required => true
+  property :index_version,  Integer, :default => 0, :required => true # will help us avoid duplication during indexing
+  property :updated_on,     DateTime
+  property :last_ping,      DateTime
+  property :is_alive,       Boolean, :default => false
 
   # each FtpServer is linked to entries from the Entry class
   # so we don't have to bother wether the entries are currently
@@ -224,26 +226,32 @@ class FtpServer
       @logger.info("Server connected")
       start_time = Time.now
       # Before get list, delete old ftp entries if there are any
-      if in_swap
-        FtpEntry.all(:ftp_server_id => id).destroy
-        @logger.info("Old ftp entries in ftp_entry deleted before get entries")
-      else
-        SwapFtpEntry.all(:ftp_server_id => id).destroy
-        @logger.info("Old ftp entries in swap_ftp_entry deleted before get entries")
-      end
+      #if in_swap
+      #  FtpEntry.all(:ftp_server_id => id).destroy
+      #  @logger.info("Old ftp entries in ftp_entry deleted before get entries")
+      #else
+      #  SwapFtpEntry.all(:ftp_server_id => id).destroy
+      #  @logger.info("Old ftp entries in swap_ftp_entry deleted before get entries")
+      #end
+      #Entry.all(:ftp_server_id => id, :index_version.not => index_version).destroy
+      #@logger.info("Old ftp entries cleaned up before to get entries, just in case...")
       @entry_count = 0
-      get_list_of(ftp)                              # building the index
-      tree_to_insert.all(:ftp_server_id => id).save # and saving it
-      self.in_swap = !in_swap
+      get_list_of(ftp)                                                        # building the index
+      ####Entry.all(:ftp_server_id => id, :index_version => index_version+1).save # and saving it
+      #self.in_swap = !in_swap
+      # updating our index_version
+      self.index_version += 1
       save
-      # After table swap, delete old ftp entries to save db space
-      if in_swap
-        FtpEntry.all(:ftp_server_id => id).destroy
-        @logger.info("Old ftp entries in ftp_entry deleted after get entries")
-      else
-        SwapFtpEntry.all(:ftp_server_id => id).destroy
-        @logger.info("Old ftp entries in swap_ftp_entry deleted after get entries")
-      end
+      # After updating our index version, we can delete old ftp entries to save db space
+      #if in_swap
+      #  FtpEntry.all(:ftp_server_id => id).destroy
+      #  @logger.info("Old ftp entries in ftp_entry deleted after get entries")
+      #else
+      #  SwapFtpEntry.all(:ftp_server_id => id).destroy
+      #  @logger.info("Old ftp entries in swap_ftp_entry deleted after get entries")
+      #end
+      Entry.all(:ftp_server_id => id, :index_version.not => index_version).destroy
+      @logger.info("Old ftp entries deleted after get entries")
 
       process_time = Time.now - start_time
       @logger.info("Finish getting list of server " + name + " in " + process_time.to_s + " seconds.")
@@ -265,9 +273,9 @@ class FtpServer
 private
 
   # get the tree in which we must insert between SwapFtpEntry and FtpEntry
-  def tree_to_insert
-    in_swap ? FtpEntry : SwapFtpEntry
-  end
+  #def tree_to_insert
+  #  in_swap ? FtpEntry : SwapFtpEntry
+  #end
   
 
   # get entries under parent_path, or get root entries if parent_path is nil
@@ -309,8 +317,8 @@ private
       # We should ignore this line
       next if /^total/.match(e)
 
-# usefull for debugging purpose
-#puts "#{@entry_count} #{e}"
+      # usefull for debugging purpose
+      #puts "#{@entry_count} #{e}"
 
       if force_utf8
         begin
@@ -343,13 +351,14 @@ private
       # insertion, apparently without sensible loss of performance
       # (only preliminary test) 
       #new_entry = tree_to_insert.create!(
-      new_entry = tree_to_insert.new(
+      new_entry = Entry.create!(
         :parent_id => parent_id,
         :name => entry_basename,
         :size => entry.filesize,
         :entry_datetime => file_datetime,
         :directory => entry.dir?,
-        :ftp_server_id => id
+        :ftp_server_id => id,
+        :index_version => index_version+1
       )
       
       #entry_id = DataMapper.repository(:default).adapter.execute(sql).insert_id
