@@ -161,10 +161,15 @@ class FtpServer
      PASSWORD:#{password} IGNORED:#{ignored_dirs} NOTE:#{note}"
   end
 
-  # give the total size of the FTP Server
+  # gives the total size of the whole FTP Server
   def size
-
+    total = 0
+    entries(:index_version => index_version, :directory => false).each do |file|
+      total += Integer(file.size)
+    end
+    total
   end
+
   # handle the ping scan backend
   def self.ping_scan_result(host, is_alive)
     # fist we check if the host is known in the database

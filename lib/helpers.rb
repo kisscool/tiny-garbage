@@ -37,6 +37,7 @@ module MyHelpers
   STORAGE_UNITS = ['B', 'KB', 'MB', 'GB', 'TB']
   def number_to_human_size(number)
     return nil if number.nil?
+    return "0 B" if number == 0
     max_exp  = STORAGE_UNITS.size - 1
     number   = Float(number)
     exponent = (Math.log(number) / Math.log(1024)).to_i # Convert to base 1024
