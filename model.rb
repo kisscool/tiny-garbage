@@ -102,11 +102,11 @@ class Entry
 
     # we build the base query
     filter = {
-      :name.like => "%#{query}%",                       # search an entry through a string
-      :index_version => FtpServer.first.index_version,  # restrict to current index_version
-      :order => build_order,                            # apply a sort order
-      :limit => per_page,                               # limit the number of results
-      :offset => (page - 1) * per_page                  # with the following offset
+      :name.like => "%#{query}%",                                     # search an entry through a string
+      :index_version => FtpServer.first(:ftp_server).index_version,   # restrict to current index_version
+      :order => build_order,                                          # apply a sort order
+      :limit => per_page,                                             # limit the number of results
+      :offset => (page - 1) * per_page                                # with the following offset
     }
     # execute the query
     results = Entry.all(filter)
@@ -161,6 +161,10 @@ class FtpServer
      PASSWORD:#{password} IGNORED:#{ignored_dirs} NOTE:#{note}"
   end
 
+  # give the total size of the FTP Server
+  def size
+
+  end
   # handle the ping scan backend
   def self.ping_scan_result(host, is_alive)
     # fist we check if the host is known in the database
