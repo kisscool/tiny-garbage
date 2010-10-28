@@ -101,9 +101,15 @@ class Entry
     build_order = DataMapper::Query::Operator.new(t[0], t[1] || 'asc')
 
     # we build the base query
-    filter = {:name.like => "%#{query}%", :order => build_order}
-    # query with a limited number of results
-    results = Entry.all(filter.merge({:limit => per_page, :offset => (page - 1) * per_page}))
+    filter = {
+      :name.like => "%#{query}%",                       # search an entry through a string
+      :index_version => FtpServer.first.index_version,  # restrict to current index_version
+      :order => build_order,                            # apply a sort order
+      :limit => per_page,                               # limit the number of results
+      :offset => (page - 1) * per_page                  # with the following offset
+    }
+    # execute the query
+    results = Entry.all(filter)
     
     # how many pages we will have
     page_count = (Entry.count(filter).to_f / per_page).ceil
