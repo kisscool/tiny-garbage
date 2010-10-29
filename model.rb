@@ -41,7 +41,7 @@ class Entry
   property :size,           Float
   property :entry_datetime, DateTime
   property :directory,      Boolean, :default => false, :required => true
-  property :index_version,   Integer, :default => 0, :required => true # will help us avoid duplication during indexing
+  property :index_version,  Integer, :default => 0, :required => true # will help us avoid duplication during indexing
   #property :type,           Discriminator # used to discriminate between FtpEntry and SwapFtpEntry
 
   belongs_to :ftp_server
@@ -102,11 +102,12 @@ class Entry
 
     # we build the base query
     filter = {
-      :name.like => "%#{query}%",                                     # search an entry through a string
-      :index_version => FtpServer.first(:ftp_server).index_version,   # restrict to current index_version
-      :order => build_order,                                          # apply a sort order
-      :limit => per_page,                                             # limit the number of results
-      :offset => (page - 1) * per_page                                # with the following offset
+      :name.like => "%#{query}%",                       # search an entry through a string
+      #:index_version => FtpServer.first(:ftp_server).index_version,   # restrict to current index_version
+      :links => [FtpServer.relationships[:versions]],   # do a JOIN on index_version
+      :order => build_order,                            # apply a sort order
+      :limit => per_page,                               # limit the number of results
+      :offset => (page - 1) * per_page                  # with the following offset
     }
     # execute the query
     results = Entry.all(filter)
@@ -152,6 +153,10 @@ class FtpServer
   # so we don't have to bother wether the entries are currently
   # in swap or not during our searches
   has n, :entries
+
+  # this association will permit us to do JOIN requests during search queries in
+  # order to return only relevant results (ie. those of the current valid index)
+  has n, :versions, Entry, :parent_key => [ :index_version ], :child_key => [ :index_version ]
 
   ## methods ##
   

@@ -4,7 +4,11 @@
 ################### CONFIGURATION
 
 # in order to configure Tiny-Garbage, just copy config.rb.sample as 
-# config.rb and voila !
+# config.rb, uncomment what you want and voila !
+
+# only useful for debugging purpose
+#DataMapper::Logger.new($stdout, :debug)
+
 
 # by default we use a Sqlite backend
 # if you need better performances (eg. for a real deployment) then comment
