@@ -16,8 +16,7 @@ require 'dm-aggregates'
 # a lot of this code has been forked from Zouchaoqun's ezFtpSearch project
 # kuddos to his work
 
-# my main modifications have consisted to reduce code duplication and to
-# migrate it from ActiveRecord to DataMapper
+# the code has now become very different than ezFtpSearch
 
 
 ###############################################################################
@@ -31,7 +30,7 @@ require File.join(File.dirname(__FILE__), './config.rb')
 ################### ORM MODEL CODE (do not edit if you don't know)
 
 #
-# the Entry class is a generic class for fiels and directories 
+# the Entry class is a generic class for fields and directories 
 class Entry
   include DataMapper::Resource
   property :id,             Serial
@@ -42,7 +41,6 @@ class Entry
   property :entry_datetime, DateTime
   property :directory,      Boolean, :default => false, :required => true
   property :index_version,  Integer, :default => 0, :required => true # will help us avoid duplication during indexing
-  #property :type,           Discriminator # used to discriminate between FtpEntry and SwapFtpEntry
 
   belongs_to :ftp_server
   is :tree, :order => :name
@@ -132,14 +130,7 @@ class Entry
 
 end
 
-# this class is a subclass of Entry
-# the switch between FtpEntry and SwapFtpEntry could be handled in another way
-# but we keep it that way so we don't have to break entirely legacy code
-#class FtpEntry < Entry ; end
-
-# this class is a subclass of Entry
-#class SwapFtpEntry < Entry ; end
-
+#
 # each server is documented here
 class FtpServer
   include DataMapper::Resource
@@ -154,7 +145,6 @@ class FtpServer
   property :password,       String, :default => 'garbage', :required => true
   property :ignored_dirs,   String, :default => '. .. .svn'
   property :note,           Text
-  #property :in_swap,        Boolean, :default => true, :required => true
   property :index_version,  Integer, :default => 0, :required => true # will help us avoid duplication during indexing
   property :updated_on,     DateTime
   property :last_ping,      DateTime
@@ -261,31 +251,14 @@ class FtpServer
     begin
       @logger.info("Server connected")
       start_time = Time.now
-      # Before get list, delete old ftp entries if there are any
-      #if in_swap
-      #  FtpEntry.all(:ftp_server_id => id).destroy
-      #  @logger.info("Old ftp entries in ftp_entry deleted before get entries")
-      #else
-      #  SwapFtpEntry.all(:ftp_server_id => id).destroy
-      #  @logger.info("Old ftp entries in swap_ftp_entry deleted before get entries")
-      #end
-      #Entry.all(:ftp_server_id => id, :index_version.not => index_version).destroy
-      #@logger.info("Old ftp entries cleaned up before to get entries, just in case...")
       @entry_count = 0
-      get_list_of(ftp)                                                        # building the index
-      ####Entry.all(:ftp_server_id => id, :index_version => index_version+1).save # and saving it
-      #self.in_swap = !in_swap
+      
+      # building the index
+      get_list_of(ftp)
       # updating our index_version
       self.index_version += 1
       save
-      # After updating our index version, we can delete old ftp entries to save db space
-      #if in_swap
-      #  FtpEntry.all(:ftp_server_id => id).destroy
-      #  @logger.info("Old ftp entries in ftp_entry deleted after get entries")
-      #else
-      #  SwapFtpEntry.all(:ftp_server_id => id).destroy
-      #  @logger.info("Old ftp entries in swap_ftp_entry deleted after get entries")
-      #end
+      
       Entry.all(:ftp_server_id => id, :index_version.not => index_version).destroy
       @logger.info("Old ftp entries deleted after get entries")
 
@@ -308,10 +281,6 @@ class FtpServer
 
 private
 
-  # get the tree in which we must insert between SwapFtpEntry and FtpEntry
-  #def tree_to_insert
-  #  in_swap ? FtpEntry : SwapFtpEntry
-  #end
   
 
   # get entries under parent_path, or get root entries if parent_path is nil
@@ -378,15 +347,11 @@ private
         @logger.error("raw entry: " + e)
       end
 
-      #sql = "insert into #{in_swap ? 'ftp_entries' : 'swap_ftp_entries'}"
-      #sql +=  " (parent_id,name,size,entry_datetime,directory,ftp_server_id)"
       entry_basename = entry.basename.gsub("'","''")
-      #sql += " VALUES (#{parent_id || 0},'#{entry_basename}',#{entry.filesize},'#{file_datetime}',#{entry.dir? ? 1 : 0},#{id})"
      
       # the sql query from the legacy code has been replaced by a DM
       # insertion, apparently without sensible loss of performance
       # (only preliminary test) 
-      #new_entry = tree_to_insert.create!(
       new_entry = Entry.create!(
         :parent_id => parent_id,
         :name => entry_basename,
@@ -397,7 +362,6 @@ private
         :index_version => index_version+1
       )
       
-      #entry_id = DataMapper.repository(:default).adapter.execute(sql).insert_id
       entry_id = new_entry.id
       if entry.dir?
         ftp_path = (parent_path ? parent_path : '') + '/' +
