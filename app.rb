@@ -45,8 +45,18 @@ class App < Sinatra::Base
       params[:online]
     )
 
-    # smoke it
+    # and smoke it
     haml :index
+  end
+
+  # stats
+  get '/stats' do
+    haml :stats
+  end
+
+  # FTP listing
+  get '/list' do
+    haml :list
   end
 
   ############ Misc
