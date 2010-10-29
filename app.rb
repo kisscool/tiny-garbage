@@ -32,18 +32,23 @@ class App < Sinatra::Base
   end
 
   get '/search' do
-    params[:page] ||= 1
-    params[:order] ||= "ftp_server_id.asc"
+    # check our default arguments are valid
+    params[:query] ||= ''
+    params[:page]  ||= 1
+    params[:order] ||= 'ftp_server_id.asc'
+    
+    # execute the search method
     @page_count, @results = Entry.complex_search(
       format_query(params[:query]), 
       params[:page].to_i, 
       params[:order],
       params[:online]
     )
+
+    # smoke it
     haml :index
   end
 
-  get '/'
   ############ Misc
   #
 
