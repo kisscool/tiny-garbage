@@ -118,7 +118,7 @@ def ping
 
   # static configs
   @max_retries = 3
-  BasicSocket.do_not_reverse_lookup = true
+  BasicSocket.do_not_reverse_lookup = false
   @logger = Logger.new(File.join(File.dirname(__FILE__), '../log/ping.log'), 'monthly')
   @logger.formatter = Logger::Formatter.new
   @logger.datetime_format = "%Y-%m-%d %H:%M:%S"
