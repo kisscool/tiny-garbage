@@ -66,7 +66,7 @@ class Entry
 
   # gives the remote path of the entry, eg. ftp://host/full_path
   def remote_path
-    "ftp://" + ftp_server.host + full_path
+    ftp_server.url + full_path
   end
 
   # no need to explain
@@ -175,6 +175,11 @@ class FtpServer
   def to_s
     "id:#{id} NAME:#{name} HOST:#{host} FTP_TYPE:#{ftp_type} LOGIN:#{login}
      PASSWORD:#{password} IGNORED:#{ignored_dirs} NOTE:#{note}"
+  end
+
+  # gives the url of the FTP
+  def url
+    "ftp://" + host
   end
 
   # gives the total size of the whole FTP Server

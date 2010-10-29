@@ -21,11 +21,14 @@
 #resultsDiv
   %table{:id => "results"}
     %tr
+      %th FTP
       %th Nom du fichier
       %th Taille
     - if not @results.nil?
       - @results.each do |entry|
         %tr
+          %td
+            %a{:title => entry.ftp_server.name, :href => entry.ftp_server.url}= entry.ftp_server.name
           %td
             %a{:title => entry.name, :href => entry.remote_path}= entry.full_path
           %td{:class => "resultsSize"}
