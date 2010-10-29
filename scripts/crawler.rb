@@ -16,17 +16,20 @@ require File.join(File.dirname(__FILE__), '../lib/threadpool.rb')
 
 @options = {
   :action   => '',
-  :networks => '10.2.0.*'
+  :networks => NETWORKS || '', # we use the constant in config.rb
 }
 
 ###########################################################
 ################### CORE CODE
+
+# === Index ===
 
 # this cron job will attempt to crawl each FTP server listed
 # in the database
 # the recommended frequency for this job is once a day
 #
 # a possible future optimization would be multi-threading
+
 def index
   # we prepare the threadpool
   pool = ThreadPool.new(5)
@@ -44,11 +47,7 @@ def index
 end
 
 
-# this cron job will attempt to ping an IP range with the 
-# UNIX utility 'fping'
-# the recommenced frequency for this job is one every 
-# 10 minutes for a little network, or once an hour for a
-# big network
+# === Ping ===
 
 # expand networks in an array of hosts
 # eg. "10.2.0.* 10.3.0.1" --> ["10.2.0.1", "10.2.0.2", ..., "10.3.0.1"]
@@ -69,9 +68,9 @@ def expand_network(networks)
   expanded_ip_list.flatten
 end
 
-# check if an host is alive on the TCP port 21
+# check if an host is alive on the TCP port 21 (2 second timeout)
 def ping_tcp(ip)
-  Ping.pingecho(ip, 3, 21)
+  Ping.pingecho(ip, 2, 21)
 end
 
 # check if we can make an FTP connexion with an host
@@ -106,6 +105,12 @@ def ping_ftp(ip)
     end
   end
 end
+
+# this cron job will attempt to ping an IP range with the 
+# UNIX utility 'fping'
+# the recommenced frequency for this job is one every 
+# 10 minutes for a little network, or once an hour for a
+# big network
 
 def ping
   # we get a list of hosts to check
@@ -185,5 +190,4 @@ else
   puts banner
   exit
 end
-
 
