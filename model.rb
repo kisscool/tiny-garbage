@@ -83,18 +83,24 @@ class Entry
     Entry.all(:name.like => "%#{query}%", :order => [:ftp_server_id.desc])
   end
 
-  # version with pagination
-  def self.search_with_page(query="", page=1, order="ftp_server_id.asc")
+  # return an array of entries
+  # the params are :
+  # query : searched string, in the form of "%foo%bar%"
+  # page : offset of the page of results we must return
+  # order : order string, in the form of "name", ""size" or "size.desc"
+  # online : restrict the query to online FTP servers or to every known ones
+  def self.complex_search(query="", page=1, order="ftp_server_id.asc", online=true)
     # here we define how many results we want per page
     per_page = 15
 
     # basic checks and default options
     query ||= ""
     page  ||= 1
-    if page <= 1
+    if page < 1
      page = 1
     end
     order ||= "ftp_server_id.asc"
+    online ||= true
 
     # we build the order object
     t = order.split('.')
@@ -109,6 +115,11 @@ class Entry
       :limit => per_page,                               # limit the number of results
       :offset => (page - 1) * per_page                  # with the following offset
     }
+    # restrict the query to online FTP server or to every registered FTP servers
+    if online
+      filter.merge!({ :ftp_server => [:is_alive => true] })
+    end
+
     # execute the query
     results = Entry.all(filter)
     
