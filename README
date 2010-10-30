@@ -10,12 +10,12 @@ Required gems are :
 - dm-migrations
 - dm-is-tree
 - dm-aggregates
-- dm-sqlite-adapter (or whatever else db, just one line of code to change)
+- dm-sqlite-adapter (or whatever else db)
 - sinatra
 - haml
 - sass
 - net-ftp-list
-- Rack (optionnal)
+- Rack
 
 If you have Bundler installed on your system, you can track down all those dependencies by launching the following command from inside the project directory :
 $ bundle install
@@ -24,11 +24,12 @@ $ bundle install
 
 = The crawler part
 
-Just do a clone of the project git repository, install the missing dependencies then configure your cron to launch the scripts/*.cron.rb scripts at whatever frequency you want.
+Do a clone of the project git repository, install the missing dependencies then create the configuration file by copying config.rb.sample as config.rb and edit it to suit your taste.
 
-You will certainly want to configure :
-* model.rb to connect to your database
-* scripts/ping.cron.rb to specify which IP ranges you want to scan
+Configure your crontab to launch periodically the following commands :
+* "$path_to_project/scripts/crawler.rb ping" (with a recommenced frequency of every 10 minutes)
+* "$path_to_project/scripts/crawler.rb index" (with a recommended frequency of once a day)
+
 
 = The Web UI part
 For a first try you can just launch "rackup config.ru" in order to test the web UI with the pure ruby Webrick server.
@@ -36,4 +37,4 @@ If you want to deploy it in production, you will want to check Unicorn, Thin or 
 
 == Thanks
 
-Thanks to Loic Gomez for the first Garbage Collector, which was so useful through the years, and thanks to Zouchaoqun's ezFtpSearch (http://github.com/zouchaoqun/ezftpsearch) whose model bootstrapped our work.
+Thanks to Loic Gomez for the first Garbage Collector, which was so useful back in the days, and thanks to Zouchaoqun's ezFtpSearch (http://github.com/zouchaoqun/ezftpsearch) whose model bootstrapped our work.
