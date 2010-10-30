@@ -2,10 +2,10 @@
 #resultsDiv
   %table{:id => "results"}
     %tr
-      %th Nom
-      %th Nombre de fichiers
-      %th Taille
-      %th Dernier scan
+      %th Name
+      %th Number of files
+      %th Size
+      %th Last scan
       %th Online?
     - if not @ftp_list.nil?
       - @ftp_list.each do |ftp|
