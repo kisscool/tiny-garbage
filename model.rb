@@ -259,7 +259,7 @@ class FtpServer
       get_list_of(ftp)
       # updating our index_version
       self.index_version += 1
-      updated_on = Time.now
+      self.updated_on = Time.now
       save
       
       Entry.all(:ftp_server_id => id, :index_version.not => index_version).destroy
