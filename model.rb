@@ -175,10 +175,12 @@ class FtpServer
   # gives the total size of the whole FTP Server
   def size
     total = 0
-    entries(:index_version => index_version, :directory => false).each do |file|
-      total += Integer(file.size)
-    end
-    total
+    Entry.sum(:size, :ftp_server_id => id, :index_version => index_version, :directory => false)
+  end
+
+  # gives the number of files in the FTP
+  def number_of_files
+    Entry.all(:ftp_server_id => id, :directory => false).count
   end
 
   # handle the ping scan backend
@@ -257,6 +259,7 @@ class FtpServer
       get_list_of(ftp)
       # updating our index_version
       self.index_version += 1
+      updated_on = Time.now
       save
       
       Entry.all(:ftp_server_id => id, :index_version.not => index_version).destroy
@@ -273,7 +276,6 @@ class FtpServer
       retry
     ensure
       ftp.close if !ftp.closed?
-      updated_on = Time.now
       @logger.info("Ftp connection closed.")
       @logger.close
     end

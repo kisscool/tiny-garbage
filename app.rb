@@ -56,6 +56,7 @@ class App < Sinatra::Base
 
   # FTP listing
   get '/list' do
+    @ftp_list = FtpServer.all
     haml :list
   end
 
