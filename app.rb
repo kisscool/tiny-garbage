@@ -51,6 +51,11 @@ class App < Sinatra::Base
 
   # stats
   get '/stats' do
+    @total_count = FtpServer.all.count
+    @total_last_ping = FtpServer.max(:last_ping)
+    @total_last_scan = FtpServer.max(:updated_on)
+    @total_number_of_files = Entry.all(:links => [FtpServer.relationships[:versions]], :directory => false).count
+    @total_size = Entry.sum(:size, :links => [FtpServer.relationships[:versions]], :directory => false)
     haml :stats
   end
 

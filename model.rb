@@ -180,7 +180,7 @@ class FtpServer
 
   # gives the number of files in the FTP
   def number_of_files
-    Entry.all(:ftp_server_id => id, :directory => false).count
+    Entry.all(:ftp_server_id => id, :index_version => index_version, :directory => false).count
   end
 
   # handle the ping scan backend
