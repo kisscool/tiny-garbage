@@ -5,6 +5,7 @@ require 'rubygems'
 require 'socket'
 # use Bundler if present
 begin
+  ENV['BUNDLE_GEMFILE'] = File.join(File.dirname(__FILE__), './Gemfile')
   require 'bundler/setup'
 rescue LoadError
 end
