@@ -75,9 +75,8 @@ end
 
 # check if we can make an FTP connexion with an host
 def ping_ftp(ip)
-  puts ip
-  #line.chomp!
-  @logger.info("Trying alive host #{ip} for FTP connexion}")
+  #puts ip
+  @logger.info("on #{ip} : Trying alive host #{ip} for FTP connexion}")
   # we check if its FTP port is open
   retries_count = 0
   begin
@@ -85,8 +84,7 @@ def ping_ftp(ip)
     # if the FTP port is responding, then we update
     # the database
     if ftp && !ftp.closed?
-      @logger.info("Host #{ip} did accept FTP connexion")
-      #FtpServer.ping_scan_result(line, true)
+      @logger.info("on #{ip} : Host #{ip} did accept FTP connexion")
       ftp.close
       return true
     end
@@ -96,8 +94,7 @@ def ping_ftp(ip)
     if (retries_count >= @max_retries)
       # if we surpass @max_retries, then the host is
       # not considered as an FTP host
-      @logger.info("Host #{ip} didn't accept FTP connexion")
-      #FtpServer.ping_scan_result(line, false)
+      @logger.info("on #{ip} : Host #{ip} didn't accept FTP connexion")
       return false
     else
       sleep(10)

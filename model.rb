@@ -231,20 +231,20 @@ class FtpServer
       @logger = Logger.new(File.dirname(__FILE__) + '/log/spider.log', 'monthly')
       @logger.formatter = Logger::Formatter.new
       @logger.datetime_format = "%Y-%m-%d %H:%M:%S"
-      @logger.info("Trying ftp server #{name} (id=#{id}) on #{host}")
+      @logger.info("on #{host} : Trying ftp server #{name} (id=#{id})")
       ftp = Net::FTP.open(host, login, password)
       ftp.passive = true
     rescue => detail
       retries_count += 1
-      @logger.error("Open ftp exception: " + detail.class.to_s + " detail: " + detail.to_s)
-      @logger.error("Retrying #{retries_count}/#{@max_retries}.")
+      @logger.error("on #{host} : Open ftp exception: " + detail.class.to_s + " detail: " + detail.to_s)
+      @logger.error("on #{host} : Retrying #{retries_count}/#{@max_retries}.")
       if (retries_count >= @max_retries)
-        @logger.error("Retry reach max times, now exit.")
+        @logger.error("on #{host} : Retry reach max times, now exit.")
         @logger.close
         exit
       end
       ftp.close if (ftp && !ftp.closed?)
-      @logger.error("Wait 30s before retry open ftp")
+      @logger.error("on #{host} : Wait 30s before retry open ftp")
       sleep(30)
       retry
     end
@@ -252,7 +252,7 @@ class FtpServer
     # Trying to get ftp entry-list
     get_list_retries = 0
     begin
-      @logger.info("Server connected")
+      @logger.info("on #{host} : Server connected")
       start_time = Time.now
       @entry_count = 0
       
@@ -264,20 +264,20 @@ class FtpServer
       save
       
       Entry.all(:ftp_server_id => id, :index_version.not => index_version).destroy
-      @logger.info("Old ftp entries deleted after get entries")
+      @logger.info("on #{host} : Old ftp entries deleted after get entries")
 
       process_time = Time.now - start_time
-      @logger.info("Finish getting list of server " + name + " in " + process_time.to_s + " seconds.")
-      @logger.info("Total entries: #{@entry_count}. #{(@entry_count/process_time).to_i} entries per second.")
+      @logger.info("on #{host} : Finish getting list of server " + name + " in " + process_time.to_s + " seconds.")
+      @logger.info("on #{host} : Total entries: #{@entry_count}. #{(@entry_count/process_time).to_i} entries per second.")
     rescue => detail
       get_list_retries += 1
-      @logger.error("Get entry list exception: " + detail.class.to_s + " detail: " + detail.to_s)
-      @logger.error("Retrying #{get_list_retries}/#{@max_retries}.")
+      @logger.error("on #{host} : Get entry list exception: " + detail.class.to_s + " detail: " + detail.to_s)
+      @logger.error("on #{host} : Retrying #{get_list_retries}/#{@max_retries}.")
       raise if (get_list_retries >= @max_retries)
       retry
     ensure
       ftp.close if !ftp.closed?
-      @logger.info("Ftp connection closed.")
+      @logger.info("on #{host} : Ftp connection closed.")
       @logger.close
     end
   end
@@ -296,27 +296,27 @@ private
       entry_list = parent_path ? ftp.list(parent_path) : ftp.list
     rescue => detail
       retries_count += 1
-      @logger.error("Ftp LIST exception: " + detail.class.to_s + " detail: " + detail.to_s)
-      @logger.error("Retrying get ftp list #{retries_count}/#{@max_retries}")
+      @logger.error("on #{host} : Ftp LIST exception: " + detail.class.to_s + " detail: " + detail.to_s)
+      @logger.error("on #{host} : Retrying get ftp list #{retries_count}/#{@max_retries}")
       raise if (retries_count >= @max_retries)
       
       reconnect_retries_count = 0
       begin
         ftp.close if (ftp && !ftp.closed?)
-        @logger.error("Wait 30s before reconnect")
+        @logger.error("on #{host} : Wait 30s before reconnect")
         sleep(30)
         ftp.connect(host)
         ftp.login(login, password)
         ftp.passive = true
       rescue => detail2
         reconnect_retries_count += 1
-        @logger.error("Reconnect ftp failed, exception: " + detail2.class.to_s + " detail: " + detail2.to_s)
-        @logger.error("Retrying reconnect #{reconnect_retries_count}/#{@max_retries}")
+        @logger.error("on #{host} : Reconnect ftp failed, exception: " + detail2.class.to_s + " detail: " + detail2.to_s)
+        @logger.error("on #{host} : Retrying reconnect #{reconnect_retries_count}/#{@max_retries}")
         raise if (reconnect_retries_count >= @max_retries)
         retry
       end
       
-      @logger.error("Ftp reconnected!")
+      @logger.error("on #{host} : Ftp reconnected!")
       retry
     end
 
@@ -332,7 +332,7 @@ private
         begin
           e_utf8 = ic.iconv(e)
         rescue Iconv::IllegalSequence
-          @logger.error("Iconv::IllegalSequence, file ignored. raw data: " + e)
+          @logger.error("on #{host} : Iconv::IllegalSequence, file ignored. raw data: " + e)
           next
         end
       end
@@ -345,9 +345,9 @@ private
       begin
         file_datetime = entry.mtime.strftime("%Y-%m-%d %H:%M:%S")
       rescue => detail3
-        puts("strftime failed, exception: " + detail3.class.to_s + " detail: " + detail3.to_s)
-        @logger.error("strftime failed, exception: " + detail3.class.to_s + " detail: " + detail3.to_s)   
-        @logger.error("raw entry: " + e)
+        puts("on #{host} : strftime failed, exception: " + detail3.class.to_s + " detail: " + detail3.to_s)
+        @logger.error("on #{host} : strftime failed, exception: " + detail3.class.to_s + " detail: " + detail3.to_s)   
+        @logger.error("on #{host} : raw entry: " + e)
       end
 
       entry_basename = entry.basename.gsub("'","''")
