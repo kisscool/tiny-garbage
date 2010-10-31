@@ -23,6 +23,7 @@
     %tr
       %th FTP
       %th File name
+      %th Date
       %th Size
     - if not @results.nil?
       - @results.each do |entry|
@@ -31,16 +32,19 @@
             %a{:title => entry.ftp_server.name, :href => entry.ftp_server.url}= entry.ftp_server.name
           %td
             %a{:title => entry.name, :href => entry.remote_path}= entry.full_path
+          %td
+            = human_date(entry.entry_datetime)
           %td{:class => "resultsSize"}
             = number_to_human_size(entry.get_size)
 
   #pager
+    = @page_count
     - if not @page_count.nil? and @page_count > 1
       - if params[:page].to_i > 1
         #pagerPrevious
           %a{:title => 'previous', :href => "/search?query=#{params[:query]}&order=#{params[:order]}&page=#{params[:page].to_i - 1}"} Previous
       #pagerMain
-        - 1.upto(@page_count) do |p|        
+        - ([1, params[:page] - 5].max).upto([@page_count, params[:page] + 5].min) do |p|        
           %a{:title => 'page', :href => "/search?query=#{params[:query]}&order=#{params[:order]}&page=#{p}"}= p
       - if params[:page].to_i < @page_count
         #pagerNext
