@@ -51,7 +51,8 @@
           %td{:class => "resultsSize"}
             = number_to_human_size(entry.get_size)
 
-
+  pages : 
+  = @page_count
   #pager  
     - if not @page_count.nil? and @page_count > 1
       - if params[:page].to_i > 1

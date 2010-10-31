@@ -9,12 +9,12 @@
       %td
         %th Last ping
       %td
-        = @total_last_ping
+        = human_date(@total_last_ping)
     %tr
       %td
         %th Last scan
       %td
-        = @total_last_scan
+        = human_date(@total_last_scan)
     %tr
       %td
         %th Total number of files

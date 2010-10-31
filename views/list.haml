@@ -14,11 +14,11 @@
             %a{:title => ftp.name, :href => ftp.url}= ftp.name
           %td
             = ftp.number_of_files
-          %td{:class => "resultsSize"}
+          %td{:class => "centertab"}
             = number_to_human_size(ftp.size)
-          %td
-            = ftp.updated_on
-          %td
+          %td{:class => "centertab"}
+            = human_date(ftp.updated_on)
+          %td{:class => "centertab"}
             = ftp.is_alive
 
 
