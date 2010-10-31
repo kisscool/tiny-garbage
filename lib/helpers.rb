@@ -3,10 +3,18 @@
 # (c) 2010 KissCool & Madtree
 
 require 'shellwords'
+require 'rack'
+require 'uri'
+require 'iconv'
 
 module MyHelpers
   include Rack::Utils
   alias_method :h, :escape_html
+
+  # convert a raw string in UTF8 in a valid URL
+  def url_utf8(raw_url)
+    URI::escape Iconv.new('latin1', 'utf-8').iconv(raw_url)
+  end
 
   def human_date(datetime)
     datetime.strftime('%d/%m/%Y').gsub(/ 0(\d{1})/, ' \1')

@@ -31,7 +31,7 @@
           %td
             %a{:title => entry.ftp_server.name, :href => entry.ftp_server.url}= entry.ftp_server.name
           %td
-            %a{:title => entry.name, :href => entry.remote_path}= entry.full_path
+            %a{:title => entry.name, :href => url_utf8(entry.remote_path)}= entry.full_path
           %td
             = human_date(entry.entry_datetime)
           %td{:class => "resultsSize"}
