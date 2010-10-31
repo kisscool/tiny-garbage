@@ -50,11 +50,10 @@
             = human_date(entry.entry_datetime)
           %td{:class => "resultsSize"}
             = number_to_human_size(entry.get_size)
-
-  pages : 
-  = @page_count
-  #pager  
-    - if not @page_count.nil? and @page_count > 1
+  - if not @page_count.nil? and @page_count > 1
+    pages : 
+    = @page_count
+    #pager  
       - if params[:page].to_i > 1
         #pagerPrevious
           %a{:title => 'previous', :href => "/search?query=#{params[:query]}&order=#{params[:order]}&page=#{params[:page].to_i - 1}"} Previous
