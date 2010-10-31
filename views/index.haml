@@ -44,7 +44,7 @@
         #pagerPrevious
           %a{:title => 'previous', :href => "/search?query=#{params[:query]}&order=#{params[:order]}&page=#{params[:page].to_i - 1}"} Previous
       #pagerMain
-        - pager(@page_count, params[:page]).each do |p|        
+        - pager(@page_count, params[:page].to_i).each do |p|        
           %a{:title => 'page', :href => "/search?query=#{params[:query]}&order=#{params[:order]}&page=#{p}"}= p
       - if params[:page].to_i < @page_count
         #pagerNext
