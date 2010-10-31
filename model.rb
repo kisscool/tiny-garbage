@@ -160,7 +160,7 @@ class FtpServer
 
   # this association will permit us to do JOIN requests during search queries in
   # order to return only relevant results (ie. those of the current valid index)
-  has n, :versions, Entry, :parent_key => [ :index_version ], :child_key => [ :index_version ]
+  has n, :versions, Entry, :parent_key => [ :id, :index_version ], :child_key => [ :ftp_server_id, :index_version ]
 
   ## methods ##
   
@@ -177,7 +177,6 @@ class FtpServer
 
   # gives the total size of the whole FTP Server
   def size
-    total = 0
     Entry.sum(:size, :ftp_server_id => id, :index_version => index_version, :directory => false)
   end
 
