@@ -90,7 +90,7 @@ class Entry
   # online : restrict the query to online FTP servers or to every known ones
   def self.complex_search(query="", page=1, order="ftp_server_id.asc", online=true)
     # here we define how many results we want per page
-    per_page = 15
+    per_page = 20
 
     # basic checks and default options
     query ||= ""
