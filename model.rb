@@ -35,14 +35,14 @@ require File.join(File.dirname(__FILE__), './config.rb')
 class Entry
   include DataMapper::Resource
   property :id,             Serial
-  property :parent_id,      Integer, :key => true
+  property :parent_id,      Integer, :index => true
   property :entries_count,  Integer, :default => 0, :required => true
   property :name,           String, :required => true, :length => 255, :index => true
   property :size,           Float
   property :entry_datetime, DateTime
   property :directory,      Boolean, :default => false, :required => true
-  property :index_version,  Integer, :default => 0, :required => true, :key => true # will help us avoid duplication during indexing
-  property :ftp_server_id,  Integer, :required => true, :key => true
+  property :index_version,  Integer, :default => 0, :required => true, :index => true # will help us avoid duplication during indexing
+  #property :ftp_server_id,  Integer, :required => true, :key => true
 
   belongs_to :ftp_server
   is :tree, :order => :name
