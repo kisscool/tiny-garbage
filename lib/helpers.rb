@@ -20,6 +20,9 @@ module MyHelpers
     datetime.strftime('%d/%m/%Y').gsub(/ 0(\d{1})/, ' \1')
   end
 
+  def human_time(datetime)
+    datetime.strftime('%d/%m/%Y %H:%M').gsub(/ 0(\d{1})/, ' \1')
+  end
   def rfc_date(datetime)
     datetime.strftime("%Y-%m-%dT%H:%M:%SZ") # 2003-12-13T18:30:02Z
   end
