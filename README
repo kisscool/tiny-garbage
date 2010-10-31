@@ -10,7 +10,7 @@ Required gems are :
 - dm-migrations
 - dm-is-tree
 - dm-aggregates
-- dm-sqlite-adapter (or whatever else db)
+- dm-sqlite-adapter (or dm-mysql-adapter, depending on your need)
 - sinatra
 - haml
 - sass
@@ -18,7 +18,11 @@ Required gems are :
 - Rack
 
 If you have Bundler installed on your system, you can track down all those dependencies by launching the following command from inside the project directory :
-$ bundle install
+$ bundle install --path vendor
+
+If you want only MySQL dependencies, you can use :
+* bundle install --path vendor --without sqlite
+(idem if you do want only sqlite dependencies)
 
 == Install
 

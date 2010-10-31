@@ -28,7 +28,7 @@ NETWORKS = '10.2.0.*'
 DataMapper.setup(:default, "sqlite3://#{File.dirname(File.expand_path(__FILE__))}/db.sqlite3")
 
 # For an installation with MySQL :
-# 1. install the 'dm-mysql-adapter' gem
+# 1. check that you did not install the bundled dependencies with a --without mysql option, or else do a "bundle install --path vendor --without sqlite"
 # 2. uncomment and complete the following line
 #DataMapper.setup(:default, "mysql://user:password@host/dbname?encoding=UTF-8")
 
