@@ -37,14 +37,14 @@
           %td{:class => "resultsSize"}
             = number_to_human_size(entry.get_size)
 
-  #pager
-    = @page_count
+  = @page_count
+  #pager  
     - if not @page_count.nil? and @page_count > 1
       - if params[:page].to_i > 1
         #pagerPrevious
           %a{:title => 'previous', :href => "/search?query=#{params[:query]}&order=#{params[:order]}&page=#{params[:page].to_i - 1}"} Previous
       #pagerMain
-        - ([1, params[:page] - 5].max).upto([@page_count, params[:page] + 5].min) do |p|        
+        - pager(@page_count, params[:page]).each do |p|        
           %a{:title => 'page', :href => "/search?query=#{params[:query]}&order=#{params[:order]}&page=#{p}"}= p
       - if params[:page].to_i < @page_count
         #pagerNext
