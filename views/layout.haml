@@ -14,7 +14,13 @@
             %a{:title => 'FTP Listing', :href => "/list"} FTP Listing
           %div{:class => 'topnavlink' } 
             %a{:title => 'Stats', :href => "/stats"} Stats
-      %header ceci est un header
+      %header
+        %div{:class => 'spacer'}
+        #headerLogo
+          %img{:src => 'img/garbage.png', :height => "80px"}
+        #headerText
+          %a{:title => 'Tiny Garbage', :href => '/'}
+            Tiny::Garbage
 
       #content-wrapper
         %content

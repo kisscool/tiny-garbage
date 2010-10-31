@@ -17,6 +17,20 @@
           %a{:title => 'show/hide advanced', :href => "#", :id => "collapseButton"} Show advanced
       %div{:class => 'spacer'}
     #advancedSearch
+      %div{:class => 'spacer'}
+      #advancedOrder
+        Order: 
+        %select{:id => 'order', :name => 'order', :value => params[:order]}
+          %option{:value => 'ftp_server_id.asc', :selected => params[:order] == 'ftp_server_id.asc'} Server
+          %option{:value => 'name.asc', :selected => params[:order] == 'name.asc'} Name
+          %option{:value => 'entry_datetime.desc', :selected => params[:order] == 'entry_datetime.desc'} Date
+          %option{:value => 'size.desc', :selected => params[:order] == 'size.desc'} Size
+      #advancedOnline
+        Show offline:
+        %select{:id => 'online', :name => 'online', :value => params[:online]}
+          %option{:value => 'true', :selected => params[:online] == 'true'} No
+          %option{:value => 'false', :selected => params[:online] == 'false'} Yes
+
 
 #resultsDiv
   %table{:id => "results"}

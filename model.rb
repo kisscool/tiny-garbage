@@ -52,9 +52,9 @@ class Entry
   def ancestors_path
     if parent
       p = ancestors.join('/')
-      '/' + p + '/'
+      p + '/'
     else
-      '/'
+      ''
     end
   end
 
@@ -65,7 +65,7 @@ class Entry
 
   # gives the remote path of the entry, eg. ftp://host/full_path
   def remote_path
-    ftp_server.url + full_path
+    ftp_server.url + '/' +full_path
   end
 
   # no need to explain
