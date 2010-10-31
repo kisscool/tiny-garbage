@@ -41,5 +41,14 @@ module MyHelpers
 
     "%n %u".gsub(/%n/, ((number * 100).round.to_f / 100).to_s).gsub(/%u/, STORAGE_UNITS[exponent])
   end
+  
+  def pager( page_count, page_current )
+    display = [10, page_count].min
+    return (1..display) if display < 10
+    return (1..10) if page_current < 6
+    return ((page_count-10)..page_count) if (page_count - page_current) < 5
+    return ((page_current-5)..page_current+5)
+    
+  end
 
 end
