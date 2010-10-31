@@ -21,6 +21,7 @@ module MyHelpers
   end
 
   def human_time(datetime)
+    return '' if datetime.nil?
     datetime.strftime('%d/%m/%Y %H:%M').gsub(/ 0(\d{1})/, ' \1')
   end
   def rfc_date(datetime)
