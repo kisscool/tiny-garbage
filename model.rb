@@ -124,6 +124,7 @@ class Entry
     
     # how many pages we will have
     filter.delete(:limit)
+    filter.delete(:offset)
     page_count = (Entry.count(filter).to_f / per_page).ceil
 
     # finally we return both informations
