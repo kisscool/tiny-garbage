@@ -129,13 +129,16 @@ def ping
   expanded_ip_list.each do |ip|
     # we use thread in order to speed up the process
     pool.dispatch(ip) do |ip|
-      if ping_tcp(ip)   # first we check the host is alive
+      if ping_tcp(ip)   # first we check if the host is alive
         if ping_ftp(ip) # then we check the FTP connexion
           FtpServer.ping_scan_result(ip, true)
-        else
-          FtpServer.ping_scan_result(ip, false)
+          next
         end
       end
+      #begin
+      FtpServer.ping_scan_result(ip, false)
+      #rescue
+      #end
     end
   end
 
