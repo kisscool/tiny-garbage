@@ -101,7 +101,7 @@ def ping_ftp(ip)
       retry
     end
   ensure
-    ftp.close if !ftp.closed?
+    ftp.close if (ftp && !ftp.closed?)
   end
 end
 
