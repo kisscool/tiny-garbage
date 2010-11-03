@@ -100,6 +100,8 @@ def ping_ftp(ip)
       sleep(10)
       retry
     end
+  ensure
+    ftp.close if !ftp.closed?
   end
 end
 
@@ -135,10 +137,7 @@ def ping
           next
         end
       end
-      #begin
       FtpServer.ping_scan_result(ip, false)
-      #rescue
-      #end
     end
   end
 
