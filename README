@@ -1,5 +1,7 @@
 == Tiny-Garbage
 
+Note : You should check the successors of Tiny-Garbage : Tiny-Garbage2 for MongoDB (http://github.com/kisscool/tiny-garbage2) and Tiny-Garbage3 for Redis (http://github.com/kisscool/tiny-garbage3).
+
 Just a little FTP crawler, with a little Sinatra based search interface in order to browse the FTP index.
 Nothing else, nothing more.
 
